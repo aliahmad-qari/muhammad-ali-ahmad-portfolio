@@ -28,6 +28,15 @@ export default function Projects() {
 
   const projects = [
     {
+      id: 'clickopticx',
+      title: 'ClickOpticX WiFi Management',
+      description: 'Online WiFi management SaaS platform with package activation, user data records, and comprehensive admin dashboard.',
+      tech: ['React', 'Node.js', 'MongoDB', 'Express', 'WiFi API'],
+      link: 'https://clickopticx-b7xr.onrender.com/',
+      image: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=600&h=400&fit=crop',
+      gradient: 'from-cyan-500 to-blue-500'
+    },
+    {
       id: 'dibnow',
       title: 'Dibnow Platform',
       description: 'Repair & shop management SaaS with authentication, online tracking system, and payment integrations.',

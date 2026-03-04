@@ -12,7 +12,7 @@ export default function Navbar() {
       setScrolled(window.scrollY > 50)
       
       // Update active section based on scroll position
-      const sections = ['home', 'about', 'skills', 'experience', 'projects', 'contact']
+      const sections = ['home', 'about', 'education', 'skills', 'experience', 'projects', 'contact']
       const current = sections.find(section => {
         const element = document.getElementById(section)
         if (element) {
@@ -31,6 +31,7 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
+    { name: 'Education', href: '#education' },
     { name: 'Skills', href: '#skills' },
     { name: 'Experience', href: '#experience' },
     { name: 'Projects', href: '#projects' },
@@ -41,8 +42,9 @@ export default function Navbar() {
     <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'glass shadow-2xl py-2' : 'py-4'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <a href="#home" className="text-2xl font-bold gradient-text hover:scale-110 transition-transform">
+          <a href="#home" className="text-2xl font-bold gradient-text hover:scale-110 transition-transform relative group">
             MAA
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 group-hover:w-full transition-all duration-300"></span>
           </a>
           
           <div className="hidden md:flex space-x-1">
@@ -50,20 +52,23 @@ export default function Navbar() {
               <a 
                 key={link.name} 
                 href={link.href} 
-                className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                className={`px-4 py-2 rounded-lg transition-all duration-300 relative group ${
                   activeSection === link.href.slice(1) 
-                    ? 'bg-purple-500/20 text-white font-semibold' 
-                    : 'text-gray-300 hover:text-white hover:bg-purple-500/10'
+                    ? 'text-white font-semibold' 
+                    : 'text-gray-300 hover:text-white'
                 }`}
               >
                 {link.name}
+                <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-300 ${
+                  activeSection === link.href.slice(1) ? 'w-full' : 'w-0 group-hover:w-full'
+                }`}></span>
               </a>
             ))}
           </div>
 
           <button 
             onClick={() => setIsOpen(!isOpen)} 
-            className="md:hidden text-white p-2 hover:bg-purple-500/20 rounded-lg transition-colors"
+            className="md:hidden text-white p-2 hover:bg-purple-500/20 rounded-lg transition-all hover:scale-110 hover:rotate-90 duration-300"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -78,13 +83,16 @@ export default function Navbar() {
                 key={link.name} 
                 href={link.href} 
                 onClick={() => setIsOpen(false)} 
-                className={`block px-4 py-3 rounded-lg transition-all ${
+                className={`block px-4 py-3 rounded-lg transition-all relative group ${
                   activeSection === link.href.slice(1)
-                    ? 'bg-purple-500/20 text-white font-semibold'
+                    ? 'text-white font-semibold'
                     : 'text-gray-300 hover:text-white hover:bg-purple-500/10'
                 }`}
               >
                 {link.name}
+                <span className={`absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-300 ${
+                  activeSection === link.href.slice(1) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                }`}></span>
               </a>
             ))}
           </div>

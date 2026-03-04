@@ -39,11 +39,11 @@ export default function About() {
             <div className="glass p-8 rounded-2xl hover-lift">
               <h3 className="text-2xl font-bold mb-4 text-purple-400">Professional Summary</h3>
               <p className="text-gray-300 leading-relaxed text-lg mb-6">
-                I am a passionate Full-Stack Developer with 1.5+ years of hands-on experience building scalable web applications, SaaS platforms, admin dashboards, and enterprise solutions. I specialize in secure authentication systems, payment integrations (Stripe, PayPal, PayFast), RESTful API development, and cloud deployment using Vercel, AWS, Render, and MongoDB Atlas. I focus on writing clean, maintainable, and production-ready code.
+                I am a passionate Full-Stack Developer with 1.5+ years of hands-on experience building scalable web applications, SaaS platforms, admin dashboards, and enterprise solutions. I specialize in secure authentication systems, payment integrations (Stripe, PayPal, PayFast), RESTful API development, GraphQL, WebSockets for real-time communication, and cloud deployment using Vercel, AWS Lambda, Render, and MongoDB Atlas. I focus on writing clean, maintainable, and production-ready code with expertise in PHP, Laravel, Node.js, and modern database technologies including MySQL, PostgreSQL, Redis, and Firebase.
               </p>
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="glass p-4 rounded-lg text-center hover:bg-purple-500/10 transition-colors">
-                  <div className="text-3xl font-bold gradient-text">1.5+</div>
+                  <div className="text-3xl font-bold gradient-text">2.5+</div>
                   <div className="text-sm text-gray-400">Years Experience</div>
                 </div>
                 <div className="glass p-4 rounded-lg text-center hover:bg-purple-500/10 transition-colors">

@@ -32,9 +32,9 @@ export default function Contact() {
   }
 
   const contactInfo = [
-    { icon: <Mail size={24} />, label: 'Email', value: 'ali.islamic.meh1@gmail.com', link: 'mailto:ali.islamic.meh1@gmail.com', color: 'from-blue-500 to-cyan-500' },
-    { icon: <Phone size={24} />, label: 'WhatsApp', value: '+92 307 9922301', link: 'https://wa.me/923079922301', color: 'from-green-500 to-emerald-500' },
-    { icon: <Linkedin size={24} />, label: 'LinkedIn', value: 'muhammad-ali-ahmad-mern', link: 'https://linkedin.com/in/muhammad-ali-ahmad-mern', color: 'from-purple-500 to-pink-500' }
+    { icon: <Mail size={24} />, label: 'Email', value: 'ali.islamic.meh1@gmail.com', link: 'mailto:ali.islamic.meh1@gmail.com', color: 'from-blue-500 to-cyan-500', iconColor: 'text-blue-400 group-hover:text-cyan-400' },
+    { icon: <Phone size={24} />, label: 'WhatsApp', value: '+92 307 9922301', link: 'https://wa.me/923079922301', color: 'from-green-500 to-emerald-500', iconColor: 'text-green-400 group-hover:text-emerald-400' },
+    { icon: <Linkedin size={24} />, label: 'LinkedIn', value: 'muhammad-ali-ahmad-mern', link: 'https://linkedin.com/in/muhammad-ali-ahmad-mern', color: 'from-purple-500 to-pink-500', iconColor: 'text-purple-400 group-hover:text-pink-400' }
   ]
 
   return (
@@ -52,7 +52,7 @@ export default function Contact() {
               {contactInfo.map((item, index) => (
                 <a key={index} href={item.link} target="_blank" rel="noopener noreferrer" className="glass p-5 rounded-xl flex items-center gap-4 hover-lift group relative overflow-hidden">
                   <div className={`absolute inset-0 bg-gradient-to-r ${item.color} opacity-0 group-hover:opacity-10 transition-opacity`}></div>
-                  <div className={`text-transparent bg-clip-text bg-gradient-to-r ${item.color} relative z-10`}>{item.icon}</div>
+                  <div className={`${item.iconColor} relative z-10 transition-colors duration-300`}>{item.icon}</div>
                   <div className="relative z-10">
                     <p className="text-gray-400 text-sm">{item.label}</p>
                     <p className="font-semibold group-hover:text-purple-400 transition-colors">{item.value}</p>

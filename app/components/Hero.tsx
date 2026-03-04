@@ -1,8 +1,23 @@
 'use client'
 import { Download, Briefcase, ArrowRight, Sparkles, MapPin } from 'lucide-react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Hero() {
+  const [animatedTitle, setAnimatedTitle] = useState('')
+  const [currentWordIndex, setCurrentWordIndex] = useState(0)
+  
+  const titleWords = ['Full-Stack', 'Developer', '|', 'Building', 'Scalable', 'Web', '&', 'SaaS', 'Applications']
+  const colors = ['text-blue-400', 'text-purple-400', 'text-gray-400', 'text-cyan-400', 'text-pink-400', 'text-green-400', 'text-gray-400', 'text-orange-400', 'text-indigo-400']
+
+  useEffect(() => {
+    if (currentWordIndex < titleWords.length) {
+      const timer = setTimeout(() => {
+        setCurrentWordIndex(currentWordIndex + 1)
+      }, 300)
+      return () => clearTimeout(timer)
+    }
+  }, [currentWordIndex])
+
   useEffect(() => {
     // Create floating particles
     const particles = document.querySelector('.particles')
@@ -32,11 +47,28 @@ export default function Hero() {
               <Sparkles className="text-purple-400 animate-pulse" size={24} />
               <span className="text-purple-400 font-semibold">Welcome to my portfolio</span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-200 to-white">
-              Muhammad Ali Ahmad
+            <h1 className="text-5xl md:text-7xl font-bold mb-4 leading-tight">
+              {['Muhammad', 'Ali', 'Ahmad'].map((word, idx) => (
+                <span 
+                  key={idx} 
+                  className="inline-block mr-4 animate-fadeIn"
+                  style={{animationDelay: `${idx * 0.2}s`, opacity: 0, animationFillMode: 'forwards'}}
+                >
+                  {word}
+                </span>
+              ))}
             </h1>
-            <h2 className="text-2xl md:text-3xl gradient-text font-semibold mb-4">
-              Full-Stack Developer | Building Scalable Web & SaaS Applications
+            <h2 className="text-2xl md:text-3xl font-semibold mb-4 min-h-[80px]">
+              {titleWords.map((word, idx) => (
+                <span 
+                  key={idx}
+                  className={`inline-block mr-2 transition-all duration-500 ${
+                    idx < currentWordIndex ? `${colors[idx]} scale-100 opacity-100` : 'scale-0 opacity-0'
+                  }`}
+                >
+                  {word}
+                </span>
+              ))}
             </h2>
             <div className="flex items-center gap-2 mb-6 text-gray-400">
               <MapPin size={18} className="text-purple-400" />
