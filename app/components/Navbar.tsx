@@ -42,8 +42,19 @@ export default function Navbar() {
     <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'glass shadow-2xl py-2' : 'py-4'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <a href="#home" className="text-2xl font-bold gradient-text hover:scale-110 transition-transform relative group">
-            MAA
+          <a href="#home" className="text-2xl font-bold relative group overflow-visible">
+            <span className="relative inline-flex items-center justify-center w-16 h-8">
+              {/* Center M with ping effect and color change */}
+              <span className="absolute inset-0 flex items-center justify-center">
+                <span className="text-purple-400 animate-ping opacity-20 text-2xl">M</span>
+              </span>
+              {/* Main M with color animation */}
+              <span className="relative text-2xl z-10 animate-color-shift">M</span>
+              {/* Orbiting A */}
+              <span className="absolute left-1/2 top-1/2 animate-orbit text-cyan-400 text-xl font-bold">A</span>
+            </span>
+            {/* Final A with color animation */}
+            <span className="text-2xl ml-1 group-hover:scale-110 transition-transform inline-block animate-color-shift">A</span>
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 group-hover:w-full transition-all duration-300"></span>
           </a>
           

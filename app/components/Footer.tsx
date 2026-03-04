@@ -1,12 +1,12 @@
 'use client'
-import { Github, Linkedin, Mail, Twitter } from 'lucide-react'
+import { Github, Linkedin, Mail } from 'lucide-react'
 
 export default function Footer() {
   const socialLinks = [
-    { icon: <Github size={24} />, link: 'https://github.com/muhammad-ali-ahmad' },
+    { icon: <Github size={24} />, link: 'https://github.com/aliahmad-qari' },
     { icon: <Linkedin size={24} />, link: 'https://linkedin.com/in/muhammad-ali-ahmad-mern' },
     { icon: <Mail size={24} />, link: 'mailto:ali.islamic.meh1@gmail.com' },
-    { icon: <Twitter size={24} />, link: 'https://twitter.com' }
+    
   ]
 
   return (
