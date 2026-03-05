@@ -84,7 +84,7 @@ export default function Hero() {
               <a href="#contact" className="glass px-8 py-4 rounded-lg font-semibold flex items-center gap-2 hover-lift">
                 Hire Me <Briefcase size={20} />
               </a>
-              <a href="/remote resume.pdf" download className="border-2 border-purple-500 px-8 py-4 rounded-lg font-semibold flex items-center gap-2 hover:bg-purple-500/20 hover:border-purple-400 transition-all">
+              <a href="/remote%20CV.pdf" download="Muhammad_Ali_Ahmad_CV.pdf" target="_blank" rel="noopener noreferrer" className="border-2 border-purple-500 px-8 py-4 rounded-lg font-semibold flex items-center gap-2 hover:bg-purple-500/20 hover:border-purple-400 transition-all">
                 Download CV <Download size={20} />
               </a>
             </div>
