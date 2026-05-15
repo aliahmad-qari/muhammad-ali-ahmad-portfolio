@@ -41,9 +41,9 @@ export default function Contact() {
     <section id="contact" ref={sectionRef} className="py-20 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 gradient-text animate-on-scroll">
-          Get In Touch
+          Let's Work Together
         </h2>
-        <p className="text-center text-gray-400 mb-16 animate-on-scroll">Let's discuss your next project</p>
+        <p className="text-center text-gray-400 mb-16 animate-on-scroll">Open to opportunities with international companies. Contact me to discuss your web development needs.</p>
         
         <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
           <div className="animate-on-scroll">

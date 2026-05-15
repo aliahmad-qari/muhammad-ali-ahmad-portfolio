@@ -80,6 +80,15 @@ export default function Projects() {
       link: 'https://metacryptotrading.vercel.app/',
       image: 'https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=600&h=400&fit=crop',
       gradient: 'from-indigo-500 to-purple-500'
+    },
+    {
+      id: 'realestate',
+      title: 'Real Estate Web App',
+      description: 'Modern real estate marketplace with property listings, advanced search filters, pricing integration, and responsive design. Features property details, contact forms, and agent profiles.',
+      tech: ['Next.js', 'React', 'MongoDB', 'Stripe', 'TypeScript', 'Tailwind CSS'],
+      link: 'https://real-estate-web-app-omega.vercel.app/',
+      image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&h=400&fit=crop',
+      gradient: 'from-amber-500 to-orange-500'
     }
   ]
 

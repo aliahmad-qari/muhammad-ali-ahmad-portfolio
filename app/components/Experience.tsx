@@ -21,12 +21,14 @@ export default function Experience() {
   }, [])
 
   const responsibilities = [
-    'Developed scalable full-stack applications',
-    'Implemented secure JWT authentication',
-    'Integrated online payment systems',
-    'Built responsive dashboards',
-    'Optimized APIs for performance and scalability',
-    'Deployed production apps to cloud platforms'
+    'Architected and developed scalable full-stack web applications using MERN stack',
+    'Implemented secure authentication systems with JWT, OAuth, and role-based access control',
+    'Integrated multiple payment gateways including Stripe, PayPal, and PayFast',
+    'Built responsive dashboards and admin panels with real-time data updates',
+    'Optimized REST APIs and database queries for 50% performance improvement',
+    'Deployed and maintained production applications on Vercel, AWS Lambda, and Render',
+    'Led code reviews and collaborated with international development teams',
+    'Implemented CI/CD pipelines and automated testing strategies'
   ]
 
   return (
