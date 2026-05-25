@@ -12,7 +12,7 @@ export default function Navbar() {
       setScrolled(window.scrollY > 50)
       
       // Update active section based on scroll position
-      const sections = ['home', 'about', 'education', 'skills', 'experience', 'projects', 'contact']
+      const sections = ['home', 'about', 'education', 'skills', 'experience', 'why-hire-me', 'services', 'projects', 'workflow', 'contact']
       const current = sections.find(section => {
         const element = document.getElementById(section)
         if (element) {
@@ -31,9 +31,9 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Home', href: '#home' },
     { name: 'About', href: '#about' },
-    { name: 'Education', href: '#education' },
     { name: 'Skills', href: '#skills' },
     { name: 'Experience', href: '#experience' },
+    { name: 'Services', href: '#services' },
     { name: 'Projects', href: '#projects' },
     { name: 'Contact', href: '#contact' },
   ]

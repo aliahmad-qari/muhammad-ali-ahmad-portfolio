@@ -1,41 +1,78 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
-import { Mail, Phone, Linkedin, Send, CheckCircle } from 'lucide-react'
+import { useState, useRef } from 'react'
+import emailjs from '@emailjs/browser'
+import { Mail, Phone, Linkedin, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
+
+// ── EmailJS config ──────────────────────────────────────────────────────────
+// 1. Sign up free at https://www.emailjs.com
+// 2. Create a service (Gmail) → copy Service ID
+// 3. Create an email template → copy Template ID
+// 4. Copy your Public Key from Account → API Keys
+// Replace the three values below with your own:
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID'
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID'
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY'
+// ────────────────────────────────────────────────────────────────────────────
+
+type Status = 'idle' | 'loading' | 'success' | 'error'
 
 export default function Contact() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' })
-  const [submitted, setSubmitted] = useState(false)
+  const sectionRef = useIntersectionObserver()
+  const formRef = useRef<HTMLFormElement>(null)
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' })
+  const [status, setStatus] = useState<Status>('idle')
+  const [errorMsg, setErrorMsg] = useState('')
+  const [honeypot, setHoneypot] = useState('')   // spam trap
 
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible')
-        }
-      })
-    }, { threshold: 0.1 })
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value })
 
-    const elements = sectionRef.current?.querySelectorAll('.animate-on-scroll')
-    elements?.forEach(el => observer.observe(el))
+  const validate = () => {
+    if (!formData.name.trim() || formData.name.trim().length < 2) return 'Please enter your full name.'
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return 'Please enter a valid email address.'
+    if (!formData.message.trim() || formData.message.trim().length < 10) return 'Message must be at least 10 characters.'
+    return null
+  }
 
-    return () => observer.disconnect()
-  }, [])
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitted(true)
-    setTimeout(() => {
-      setFormData({ name: '', email: '', message: '' })
-      setSubmitted(false)
-    }, 3000)
+    if (honeypot) return   // bot detected
+
+    const validationError = validate()
+    if (validationError) { setErrorMsg(validationError); setStatus('error'); return }
+
+    setStatus('loading')
+    setErrorMsg('')
+
+    try {
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          from_name:    formData.name,
+          from_email:   formData.email,
+          subject:      formData.subject || 'Portfolio Contact',
+          message:      formData.message,
+          reply_to:     formData.email,
+        },
+        EMAILJS_PUBLIC_KEY
+      )
+      setStatus('success')
+      setFormData({ name: '', email: '', subject: '', message: '' })
+    } catch {
+      setStatus('error')
+      setErrorMsg('Failed to send message. Please try emailing me directly at ali.islamic.meh1@gmail.com')
+    }
   }
 
   const contactInfo = [
     { icon: <Mail size={24} />, label: 'Email', value: 'ali.islamic.meh1@gmail.com', link: 'mailto:ali.islamic.meh1@gmail.com', color: 'from-blue-500 to-cyan-500', iconColor: 'text-blue-400 group-hover:text-cyan-400' },
     { icon: <Phone size={24} />, label: 'WhatsApp', value: '+92 307 9922301', link: 'https://wa.me/923079922301', color: 'from-green-500 to-emerald-500', iconColor: 'text-green-400 group-hover:text-emerald-400' },
-    { icon: <Linkedin size={24} />, label: 'LinkedIn', value: 'muhammad-ali-ahmad-mern', link: 'https://linkedin.com/in/muhammad-ali-ahmad-mern', color: 'from-purple-500 to-pink-500', iconColor: 'text-purple-400 group-hover:text-pink-400' }
+    { icon: <Linkedin size={24} />, label: 'LinkedIn', value: 'muhammad-ali-ahmad-mern', link: 'https://linkedin.com/in/muhammad-ali-ahmad-mern', color: 'from-purple-500 to-pink-500', iconColor: 'text-purple-400 group-hover:text-pink-400' },
   ]
+
+  const inputClass = 'w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all'
 
   return (
     <section id="contact" ref={sectionRef} className="py-20 relative">
@@ -43,9 +80,12 @@ export default function Contact() {
         <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 gradient-text animate-on-scroll">
           Let's Work Together
         </h2>
-        <p className="text-center text-gray-400 mb-16 animate-on-scroll">Open to opportunities with international companies. Contact me to discuss your web development needs.</p>
-        
+        <p className="text-center text-gray-400 mb-16 animate-on-scroll">
+          Open to opportunities with international companies. Contact me to discuss your web development needs.
+        </p>
+
         <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+          {/* Contact Info */}
           <div className="animate-on-scroll">
             <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
             <div className="space-y-6">
@@ -61,39 +101,78 @@ export default function Contact() {
               ))}
             </div>
             <div className="mt-8 glass p-6 rounded-xl">
-              <h4 className="font-bold mb-2">Available for:</h4>
+              <h4 className="font-bold mb-3">Available for:</h4>
               <ul className="space-y-2 text-gray-400">
-                <li className="flex items-center gap-2"><CheckCircle size={16} className="text-green-400" /> Full-time opportunities</li>
-                <li className="flex items-center gap-2"><CheckCircle size={16} className="text-green-400" /> Freelance projects</li>
-                <li className="flex items-center gap-2"><CheckCircle size={16} className="text-green-400" /> Remote work worldwide</li>
+                {['Full-time opportunities', 'Freelance projects', 'Onsite, Hybrid & Remote', 'SaaS & startup teams'].map((item) => (
+                  <li key={item} className="flex items-center gap-2">
+                    <CheckCircle size={16} className="text-green-400 flex-shrink-0" /> {item}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
 
+          {/* Contact Form */}
           <div className="animate-on-scroll">
-            <form onSubmit={handleSubmit} className="glass p-8 rounded-2xl space-y-6 hover-lift">
-              {submitted ? (
+            <form ref={formRef} onSubmit={handleSubmit} className="glass p-8 rounded-2xl space-y-5 hover-lift" noValidate>
+              {status === 'success' ? (
                 <div className="text-center py-12">
                   <CheckCircle size={64} className="text-green-400 mx-auto mb-4" />
                   <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
-                  <p className="text-gray-400">I'll get back to you soon.</p>
+                  <p className="text-gray-400">I'll get back to you within 24 hours.</p>
+                  <button type="button" onClick={() => setStatus('idle')} className="mt-6 gradient-bg px-6 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition-all">
+                    Send Another
+                  </button>
                 </div>
               ) : (
                 <>
-                  <div>
-                    <label className="block text-sm font-semibold mb-2">Name</label>
-                    <input type="text" required value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all" placeholder="Your Name" />
+                  {/* Honeypot – hidden from real users */}
+                  <input
+                    type="text"
+                    name="website"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    style={{ display: 'none' }}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold mb-2">Name *</label>
+                      <input type="text" name="name" required value={formData.name} onChange={handleChange} className={inputClass} placeholder="Your Name" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold mb-2">Email *</label>
+                      <input type="email" name="email" required value={formData.email} onChange={handleChange} className={inputClass} placeholder="your@email.com" />
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-2">Email</label>
-                    <input type="email" required value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all" placeholder="your@email.com" />
+                    <label className="block text-sm font-semibold mb-2">Subject</label>
+                    <input type="text" name="subject" value={formData.subject} onChange={handleChange} className={inputClass} placeholder="Project inquiry, Job opportunity..." />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-2">Message</label>
-                    <textarea required value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} rows={5} className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all resize-none" placeholder="Your message..."></textarea>
+                    <label className="block text-sm font-semibold mb-2">Message *</label>
+                    <textarea name="message" required value={formData.message} onChange={handleChange} rows={5} className={`${inputClass} resize-none`} placeholder="Tell me about your project or opportunity..."></textarea>
                   </div>
-                  <button type="submit" className="w-full gradient-bg px-6 py-4 rounded-lg font-semibold flex items-center justify-center gap-2 hover:scale-105 transition-transform">
-                    Send Message <Send size={20} />
+
+                  {status === 'error' && errorMsg && (
+                    <div className="flex items-start gap-2 text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-lg p-3">
+                      <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />
+                      <span>{errorMsg}</span>
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={status === 'loading'}
+                    className="w-full gradient-bg px-6 py-4 rounded-lg font-semibold flex items-center justify-center gap-2 hover:scale-105 transition-transform disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  >
+                    {status === 'loading' ? (
+                      <><Loader2 size={20} className="animate-spin" /> Sending...</>
+                    ) : (
+                      <><Send size={20} /> Send Message</>
+                    )}
                   </button>
                 </>
               )}

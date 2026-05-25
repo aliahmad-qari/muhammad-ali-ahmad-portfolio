@@ -1,24 +1,9 @@
 'use client'
-import { useEffect, useRef } from 'react'
 import { GraduationCap, Calendar, BookOpen, Award } from 'lucide-react'
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 
 export default function Education() {
-  const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible')
-        }
-      })
-    }, { threshold: 0.1 })
-
-    const elements = sectionRef.current?.querySelectorAll('.animate-on-scroll')
-    elements?.forEach(el => observer.observe(el))
-
-    return () => observer.disconnect()
-  }, [])
+  const sectionRef = useIntersectionObserver()
 
   const courses = [
     { name: 'Web Development', color: 'from-blue-500 to-cyan-500' },
@@ -55,7 +40,17 @@ export default function Education() {
                   <GraduationCap size={40} className="text-purple-400 group-hover:text-cyan-400 transition-colors duration-300" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl md:text-3xl font-bold mb-2">Bachelor of Science in Computer Science</h3>
+                  <div className="flex flex-wrap items-center gap-3 mb-2">
+                    <h3 className="text-2xl md:text-3xl font-bold">Bachelor of Science in Computer Science</h3>
+                    <span className="relative inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-emerald-400/40 bg-emerald-500/10 text-emerald-300 overflow-hidden">
+                      <span className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 via-green-400/20 to-teal-500/20 animate-shimmer"></span>
+                      <span className="relative flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping absolute"></span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 relative"></span>
+                        Graduated
+                      </span>
+                    </span>
+                  </div>
                   <p className="text-xl text-purple-400 mb-2">Bahauddin Zakariya University, Multan</p>
                   <div className="flex items-center gap-2 text-gray-400">
                     <Calendar size={18} className="text-blue-400 animate-pulse" />
@@ -85,7 +80,7 @@ export default function Education() {
 
               <div className="flex items-center gap-3 pt-6 border-t border-purple-500/20">
                 <Award size={24} className="text-yellow-400 animate-pulse" />
-                <p className="text-gray-300">Currently pursuing degree with focus on Full-Stack Development and AI</p>
+                <p className="text-gray-300">Bachelor's degree in Computer Science from Bahauddin Zakariya University, Multan.</p>
               </div>
             </div>
           </div>

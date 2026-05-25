@@ -1,41 +1,45 @@
 'use client'
+import Image from 'next/image'
 import { Download, Briefcase, ArrowRight, Sparkles, MapPin } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 export default function Hero() {
-  const [animatedTitle, setAnimatedTitle] = useState('')
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
+  const particlesRef = useRef<HTMLDivElement>(null)
 
   const titleWords = ['Full-Stack', 'Developer', '|', 'Building', 'Scalable', 'Web', '&', 'SaaS', 'Applications']
   const colors = ['text-blue-400', 'text-purple-400', 'text-gray-400', 'text-cyan-400', 'text-pink-400', 'text-green-400', 'text-gray-400', 'text-orange-400', 'text-indigo-400']
 
   useEffect(() => {
     if (currentWordIndex < titleWords.length) {
-      const timer = setTimeout(() => {
-        setCurrentWordIndex(currentWordIndex + 1)
-      }, 300)
+      const timer = setTimeout(() => setCurrentWordIndex((i) => i + 1), 300)
       return () => clearTimeout(timer)
     }
   }, [currentWordIndex])
 
   useEffect(() => {
-    // Create floating particles
-    const particles = document.querySelector('.particles')
-    if (particles) {
-      for (let i = 0; i < 50; i++) {
-        const particle = document.createElement('div')
-        particle.className = 'particle'
-        particle.style.left = Math.random() * 100 + '%'
-        particle.style.animationDelay = Math.random() * 20 + 's'
-        particle.style.animationDuration = (Math.random() * 10 + 15) + 's'
-        particles.appendChild(particle)
-      }
+    const container = particlesRef.current
+    if (!container) return
+
+    const fragment = document.createDocumentFragment()
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement('div')
+      p.className = 'particle'
+      p.style.left = Math.random() * 100 + '%'
+      p.style.animationDelay = Math.random() * 20 + 's'
+      p.style.animationDuration = Math.random() * 10 + 15 + 's'
+      fragment.appendChild(p)
+    }
+    container.appendChild(fragment)
+
+    return () => {
+      while (container.firstChild) container.removeChild(container.firstChild)
     }
   }, [])
 
   return (
     <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
-      <div className="particles"></div>
+      <div ref={particlesRef} className="particles" aria-hidden="true"></div>
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-transparent"></div>
       <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/30 rounded-full blur-3xl animate-pulse-slow"></div>
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-pulse-slow"></div>
@@ -62,8 +66,7 @@ export default function Hero() {
               {titleWords.map((word, idx) => (
                 <span
                   key={idx}
-                  className={`inline-block mr-2 transition-all duration-500 ${idx < currentWordIndex ? `${colors[idx]} scale-100 opacity-100` : 'scale-0 opacity-0'
-                    }`}
+                  className={`inline-block mr-2 transition-all duration-500 ${idx < currentWordIndex ? `${colors[idx]} scale-100 opacity-100` : 'scale-0 opacity-0'}`}
                 >
                   {word}
                 </span>
@@ -71,10 +74,10 @@ export default function Hero() {
             </h2>
             <div className="flex items-center gap-2 mb-6 text-gray-400">
               <MapPin size={18} className="text-purple-400" />
-              <span>Multan, Pakistan • Available for Remote Work Worldwide</span>
+              <span>Multan, Pakistan • Available for Onsite, Hybrid &amp; Remote</span>
             </div>
             <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-              I design and develop modern, high-performance, scalable web applications using React, Next.js, Node.js, MongoDB, and AWS. Specialized in SaaS platforms, real estate solutions, and enterprise applications for international clients.
+              I design and develop modern, high-performance, scalable web applications using React, Next.js, Node.js, MongoDB, and AWS. Specialized in SaaS platforms, business automation, and enterprise applications for international clients.
             </p>
             <div className="flex flex-wrap gap-4">
               <a href="#projects" className="gradient-bg px-8 py-4 rounded-lg font-semibold flex items-center gap-2 hover:scale-105 transition-all relative z-10">
@@ -83,7 +86,11 @@ export default function Hero() {
               <a href="#contact" className="glass px-8 py-4 rounded-lg font-semibold flex items-center gap-2 hover-lift">
                 Hire Me <Briefcase size={20} />
               </a>
-              <a href="/Muhammad Ali Ahmad Full Stack Resume.pdf" download="Muhammad_Ali_Ahmad_Resume.pdf" target="_blank" rel="noopener noreferrer" className="border-2 border-purple-500 px-8 py-4 rounded-lg font-semibold flex items-center gap-2 hover:bg-purple-500/20 hover:border-purple-400 transition-all">
+              <a
+                href="/Muhammad-Ali-Ahmad-FullStackDev-Resume.pdf"
+                download="Muhammad-Ali-Ahmad-FullStackDev-Resume.pdf"
+                className="border-2 border-purple-500 px-8 py-4 rounded-lg font-semibold flex items-center gap-2 hover:bg-purple-500/20 hover:border-purple-400 transition-all"
+              >
                 Download Resume <Download size={20} />
               </a>
             </div>
@@ -93,7 +100,14 @@ export default function Hero() {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full blur-3xl opacity-60 animate-pulse-slow"></div>
               <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-purple-500/50 shadow-2xl shadow-purple-500/50 glow">
-                <img src="/ali2.jpeg" alt="Muhammad Ali Ahmad - Full Stack Developer" className="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
+                <Image
+                  src="/ali2.jpeg"
+                  alt="Muhammad Ali Ahmad - Full Stack Developer"
+                  fill
+                  className="object-cover hover:scale-110 transition-transform duration-500"
+                  priority
+                  sizes="(max-width: 768px) 256px, 320px"
+                />
               </div>
               <div className="absolute -bottom-4 -right-4 glass px-6 py-3 rounded-full font-semibold animate-bounce">
                 <span className="gradient-text">Available for Hire</span>

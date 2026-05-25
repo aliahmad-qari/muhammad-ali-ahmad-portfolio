@@ -1,24 +1,9 @@
 'use client'
-import { useEffect, useRef } from 'react'
 import { Code, Server, Database, CreditCard, Cloud } from 'lucide-react'
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 
 export default function Skills() {
-  const sectionRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible')
-        }
-      })
-    }, { threshold: 0.1 })
-
-    const elements = sectionRef.current?.querySelectorAll('.animate-on-scroll')
-    elements?.forEach(el => observer.observe(el))
-
-    return () => observer.disconnect()
-  }, [])
+  const sectionRef = useIntersectionObserver()
 
   const skillCategories = [
     {
