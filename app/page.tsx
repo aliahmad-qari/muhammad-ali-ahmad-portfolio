@@ -1,4 +1,5 @@
 import Navbar from './components/Navbar'
+import ScrollIndicator from './components/ScrollIndicator'
 import Hero from './components/Hero'
 import About from './components/About'
 import Education from './components/Education'
@@ -15,14 +16,15 @@ export default function Home() {
   return (
     <main>
       <Navbar />
+      <ScrollIndicator />
       <Hero />
       <About />
-      <Education />
+      <Projects />
       <Skills />
       <Experience />
+      <Education />
       <WhyHireMe />
       <Services />
-      <Projects />
       <Workflow />
       <Contact />
       <Footer />

@@ -4,14 +4,31 @@ import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 
 const projects = [
   {
+    title: 'Nexus Capital — Investment Platform',
+    description: 'A professional investment platform built for a financial services client. Features a clean, conversion-focused design with daily earnings tracking, investor onboarding flow, and a modern UI built for trust and credibility in the fintech space.',
+    tech: ['React.js', 'Node.js', 'Tailwind CSS'],
+    link: 'https://www.nexuscapitalbusiness.com',
+    github: null,
+    gradient: 'from-emerald-500 to-teal-500',
+    category: 'Client Project · Fintech',
+  },
+  {
+    title: 'Trade With Tayyab — LMS & Trading Academy',
+    description: 'A premium Learning Management System (LMS) built for a trading academy. Includes course management, student onboarding, and a professional brand identity. Designed to position the client as a high-authority trading education platform.',
+    tech: ['React.js', 'Node.js', 'Tailwind CSS'],
+    link: 'https://www.tradewithtayyab.tech',
+    github: null,
+    gradient: 'from-yellow-500 to-amber-500',
+    category: 'Client Project · EdTech',
+  },
+  {
     title: 'We Care Disability Service',
     description: 'Professional Australian NDIS disability support services platform with responsive UI, SEO-focused pages, service management structure, and business branding optimization.',
     tech: ['Next.js', 'React', 'Tailwind CSS', 'SEO', 'TypeScript'],
     link: 'https://wecaredisabilityservice.com.au/',
     github: null,
     gradient: 'from-blue-500 to-cyan-500',
-    badge: 'Live',
-    badgeColor: 'bg-green-500/20 text-green-400 border-green-500/30',
+    category: 'Client Project · NDIS',
   },
   {
     title: 'SOL Business Consultant',
@@ -20,8 +37,7 @@ const projects = [
     link: 'https://www.solbusinessconsultant.com.au/',
     github: null,
     gradient: 'from-purple-500 to-pink-500',
-    badge: 'Client Project',
-    badgeColor: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
+    category: 'Client Project · Consultancy',
   },
   {
     title: 'ClickOpticX WiFi Management',
@@ -30,8 +46,7 @@ const projects = [
     link: 'https://clickopticx-b7xr.onrender.com/',
     github: 'https://github.com/aliahmad-qari',
     gradient: 'from-cyan-500 to-blue-500',
-    badge: 'SaaS',
-    badgeColor: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
+    category: 'SaaS Platform',
   },
   {
     title: 'Dibnow Repair & Shop SaaS',
@@ -40,8 +55,7 @@ const projects = [
     link: 'https://dibnow-repair-saas.vercel.app/',
     github: 'https://github.com/aliahmad-qari',
     gradient: 'from-blue-500 to-indigo-500',
-    badge: 'SaaS',
-    badgeColor: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
+    category: 'SaaS Platform',
   },
   {
     title: 'LMS Portal',
@@ -50,8 +64,7 @@ const projects = [
     link: 'https://lms-portal-black-six.vercel.app/',
     github: 'https://github.com/aliahmad-qari',
     gradient: 'from-green-500 to-emerald-500',
-    badge: 'Production',
-    badgeColor: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+    category: 'Web Application',
   },
   {
     title: 'Real Estate Web App',
@@ -60,8 +73,7 @@ const projects = [
     link: 'https://real-estate-web-app-omega.vercel.app/',
     github: 'https://github.com/aliahmad-qari',
     gradient: 'from-amber-500 to-orange-500',
-    badge: 'Production',
-    badgeColor: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+    category: 'Web Application',
   },
   {
     title: 'MetaCrypto Trading',
@@ -70,8 +82,7 @@ const projects = [
     link: 'https://metacryptotrading.vercel.app/',
     github: 'https://github.com/aliahmad-qari',
     gradient: 'from-indigo-500 to-purple-500',
-    badge: 'Live',
-    badgeColor: 'bg-green-500/20 text-green-400 border-green-500/30',
+    category: 'Web Application',
   },
 ]
 
@@ -95,12 +106,17 @@ export default function Projects() {
             >
               <div className={`h-2 bg-gradient-to-r ${project.gradient}`}></div>
               <div className="p-6 flex flex-col flex-1">
-                <div className="flex items-start justify-between gap-2 mb-3">
+                <div className="flex items-start justify-between gap-2 mb-2">
                   <h3 className="text-lg font-bold group-hover:text-purple-400 transition-colors leading-tight">{project.title}</h3>
-                  <span className={`px-2 py-1 text-xs font-semibold rounded-full border flex-shrink-0 ${project.badgeColor}`}>
-                    {project.badge}
+                  <span className="inline-flex items-center gap-1.5 px-2 py-1 text-xs font-medium rounded-full border flex-shrink-0 bg-green-500/10 text-green-400 border-green-500/30">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping"></span>
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+                    </span>
+                    Live
                   </span>
                 </div>
+                <span className="text-xs font-medium text-purple-300/80 mb-3 block">{project.category}</span>
                 <p className="text-gray-400 mb-4 text-sm leading-relaxed flex-1">{project.description}</p>
                 <div className="flex flex-wrap gap-2 mb-5">
                   {project.tech.map((tech, idx) => (

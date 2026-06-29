@@ -1,21 +1,10 @@
 'use client'
 import Image from 'next/image'
 import { Download, Briefcase, ArrowRight, Sparkles, MapPin } from 'lucide-react'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 export default function Hero() {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0)
   const particlesRef = useRef<HTMLDivElement>(null)
-
-  const titleWords = ['Full-Stack', 'Developer', '|', 'Building', 'Scalable', 'Web', '&', 'SaaS', 'Applications']
-  const colors = ['text-blue-400', 'text-purple-400', 'text-gray-400', 'text-cyan-400', 'text-pink-400', 'text-green-400', 'text-gray-400', 'text-orange-400', 'text-indigo-400']
-
-  useEffect(() => {
-    if (currentWordIndex < titleWords.length) {
-      const timer = setTimeout(() => setCurrentWordIndex((i) => i + 1), 300)
-      return () => clearTimeout(timer)
-    }
-  }, [currentWordIndex])
 
   useEffect(() => {
     const container = particlesRef.current
@@ -62,15 +51,10 @@ export default function Hero() {
                 </span>
               ))}
             </h1>
-            <h2 className="text-2xl md:text-3xl font-semibold mb-4 min-h-[80px]">
-              {titleWords.map((word, idx) => (
-                <span
-                  key={idx}
-                  className={`inline-block mr-2 transition-all duration-500 ${idx < currentWordIndex ? `${colors[idx]} scale-100 opacity-100` : 'scale-0 opacity-0'}`}
-                >
-                  {word}
-                </span>
-              ))}
+            <h2 className="text-2xl md:text-3xl font-semibold mb-4 animate-fadeIn" style={{ animationDelay: '0.5s', opacity: 0, animationFillMode: 'forwards' }}>
+              <span className="gradient-text">Full-Stack Developer</span>
+              <span className="text-gray-500"> — </span>
+              <span className="text-gray-300">Building Scalable Web &amp; SaaS Applications</span>
             </h2>
             <div className="flex items-center gap-2 mb-6 text-gray-400">
               <MapPin size={18} className="text-purple-400" />
@@ -109,7 +93,11 @@ export default function Hero() {
                   sizes="(max-width: 768px) 256px, 320px"
                 />
               </div>
-              <div className="absolute -bottom-4 -right-4 glass px-6 py-3 rounded-full font-semibold animate-bounce">
+              <div className="absolute -bottom-4 -right-4 glass px-5 py-3 rounded-full font-semibold flex items-center gap-2">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-ping"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                </span>
                 <span className="gradient-text">Available for Hire</span>
               </div>
             </div>
