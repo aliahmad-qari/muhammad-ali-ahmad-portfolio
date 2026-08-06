@@ -13,6 +13,14 @@ const steps = [
 
 const clients = [
   {
+    name: 'SOL Training Academy',
+    url: 'https://training.solbusinessconsultant.com.au/',
+    desc: 'Enterprise MERN learning platform with DRM-protected courses, role-based portals & automated expiry reminders — Australia',
+    badge: 'Current Client',
+    badgeColor: 'bg-green-500/20 text-green-400 border-green-500/30',
+    gradient: 'from-violet-500 to-fuchsia-500',
+  },
+  {
     name: 'SOL Business Consultant',
     url: 'https://www.solbusinessconsultant.com.au/',
     desc: 'SaaS solutions, automation, NDIS operations & digital business services — Australia',
@@ -74,7 +82,7 @@ export default function Workflow() {
         </h2>
         <p className="text-center text-gray-400 mb-16 animate-on-scroll">Trusted by real businesses and international companies</p>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {clients.map((client, index) => (
             <div
               key={index}

@@ -14,6 +14,7 @@ export default function Experience() {
       type: 'Australia · Remote',
       description: 'Australian business consultancy providing NDIS compliance, company registration, payroll, bookkeeping, and digital solutions.',
       responsibilities: [
+        'Architected and shipped SOL Training Academy — a production MERN LMS with role-based admin/student portals, DRM-protected course delivery, and automated enrollment-expiry reminders',
         'Developing and maintaining modern business web applications and internal management systems',
         'Building scalable frontend applications using React.js and Next.js with optimized rendering',
         'Developing backend APIs and business logic using Node.js and Express.js',

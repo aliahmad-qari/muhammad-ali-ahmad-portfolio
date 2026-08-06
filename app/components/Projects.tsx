@@ -1,8 +1,42 @@
 'use client'
-import { ExternalLink, Github, Eye } from 'lucide-react'
+import { ExternalLink, Github, Eye, ArrowUpRight } from 'lucide-react'
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 
-const projects = [
+type Portal = {
+  name: string
+  href: string
+}
+
+type Project = {
+  title: string
+  description: string
+  tech: string[]
+  link: string
+  github: string | null
+  gradient: string
+  category: string
+  /** Additional entry points (portals, dashboards) for multi-surface platforms. */
+  portals?: Portal[]
+}
+
+const LMS_URL = 'https://training.solbusinessconsultant.com.au'
+
+const projects: Project[] = [
+  {
+    title: 'SOL Training Academy — Enterprise LMS',
+    description:
+      'End-to-end Learning Management System for an Australian NDIS training provider. Role-based portals for admins and students, an interactive course player with DRM content protection and dynamic watermarking, per-course discussion boards with opt-out control, and an automated enrollment-expiry reminder engine.',
+    tech: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'JWT', 'Tailwind CSS'],
+    link: `${LMS_URL}/`,
+    portals: [
+      { name: 'Course Catalog', href: `${LMS_URL}/training-courses` },
+      { name: 'Student Portal', href: `${LMS_URL}/login` },
+      { name: 'Admin Panel', href: `${LMS_URL}/lms-admin` },
+    ],
+    github: null,
+    gradient: 'from-violet-500 to-fuchsia-500',
+    category: 'Client Project · Enterprise LMS',
+  },
   {
     title: 'Nexus Capital — Investment Platform',
     description: 'A professional investment platform built for a financial services client. Features a clean, conversion-focused design with daily earnings tracking, investor onboarding flow, and a modern UI built for trust and credibility in the fintech space.',
@@ -125,6 +159,27 @@ export default function Projects() {
                     </span>
                   ))}
                 </div>
+                {project.portals && (
+                  <div className="mb-5 pt-4 border-t border-purple-500/15">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 mb-2.5 block">
+                      Platform Access
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {project.portals.map((portal) => (
+                        <a
+                          key={portal.href}
+                          href={portal.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-300 bg-white/[0.04] border border-white/10 hover:text-white hover:border-purple-500/40 hover:bg-purple-500/10 transition-all relative z-10"
+                        >
+                          {portal.name}
+                          <ArrowUpRight size={12} className="opacity-60" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <div className="flex gap-3 mt-auto">
                   <a
                     href={project.link}
