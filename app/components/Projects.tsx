@@ -23,6 +23,36 @@ const LMS_URL = 'https://training.solbusinessconsultant.com.au'
 
 const projects: Project[] = [
   {
+    title: 'TMG180 — Freelance Worker Marketplace',
+    description:
+      'A full-featured freelance marketplace platform where participants can browse and connect with skilled workers. Includes worker profiles, participant portal, browse/search functionality, and a structured engagement flow for service matching.',
+    tech: ['React.js', 'Node.js', 'Tailwind CSS', 'MongoDB'],
+    link: 'https://tmg180-web.vercel.app/participant/browse-workers',
+    github: null,
+    gradient: 'from-sky-500 to-indigo-500',
+    category: 'Client Project · Marketplace',
+  },
+  {
+    title: 'Quotex Marketing — Candle Probability Lab',
+    description:
+      'A quantitative research platform streaming real live Binance candles with deterministic probability-based predictions. Features a live interactive workstation across 7 spot markets and 10 timeframes, with immutable prediction locks, indicator agreement meters (EMA, RSI, MACD), and verifiable prediction evaluations.',
+    tech: ['React.js', 'Node.js', 'Binance API', 'WebSocket', 'Tailwind CSS'],
+    link: 'https://quotex-marketing.vercel.app/',
+    github: null,
+    gradient: 'from-orange-500 to-rose-500',
+    category: 'Client Project · Fintech / Trading',
+  },
+  {
+    title: 'SOL Business Consultant — Client Hub',
+    description:
+      'A compliance-first consultancy hub for Australian NDIS providers and corporates. Covers offshore staffing, NDIS registration guidance, bookkeeping, digital transformation, and the SOL Support Academy — with three progressive training levels and an AI-powered growth stack.',
+    tech: ['Next.js', 'React', 'Tailwind CSS', 'SEO', 'TypeScript'],
+    link: 'https://hub.solbusinessconsultant.com.au/',
+    github: null,
+    gradient: 'from-teal-500 to-cyan-500',
+    category: 'Client Project · Consultancy / NDIS',
+  },
+  {
     title: 'SOL Training Academy — Enterprise LMS',
     description:
       'End-to-end Learning Management System for an Australian NDIS training provider. Role-based portals for admins and students, an interactive course player with DRM content protection and dynamic watermarking, per-course discussion boards with opt-out control, and an automated enrollment-expiry reminder engine.',
@@ -126,10 +156,15 @@ export default function Projects() {
   return (
     <section id="projects" ref={sectionRef} className="py-20 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 gradient-text animate-on-scroll">
-          Featured Projects
-        </h2>
-        <p className="text-center text-gray-400 mb-16 animate-on-scroll">Real-world production applications for international clients</p>
+        <div className="mb-16 animate-on-scroll">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="h-px w-12 bg-gradient-to-r from-transparent to-purple-500"></div>
+            <span className="text-xs font-semibold uppercase tracking-widest text-purple-400">Portfolio</span>
+            <div className="h-px w-12 bg-gradient-to-l from-transparent to-purple-500"></div>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-center gradient-text mb-3">Featured Projects</h2>
+          <p className="text-center text-gray-400 text-sm">Real-world production applications for international clients</p>
+        </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, index) => (

@@ -18,10 +18,11 @@ export default function Services() {
   return (
     <section id="services" ref={sectionRef} className="py-20 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 gradient-text animate-on-scroll">
-          Services I Provide
-        </h2>
-        <p className="text-center text-gray-400 mb-16 animate-on-scroll">Comprehensive development services for modern businesses</p>
+        <div className="mb-16 animate-on-scroll">
+          <p className="text-center text-xs font-semibold uppercase tracking-widest text-purple-400 mb-3">What I offer</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-center gradient-text">Services I Provide</h2>
+          <p className="text-center text-gray-400 mt-3 text-sm">Comprehensive development services for modern businesses</p>
+        </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => (

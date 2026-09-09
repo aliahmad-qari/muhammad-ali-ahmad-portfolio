@@ -10,8 +10,7 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
-      
-      // Update active section based on scroll position
+
       const sections = ['home', 'about', 'education', 'skills', 'experience', 'why-hire-me', 'services', 'projects', 'workflow', 'contact']
       const current = sections.find(section => {
         const element = document.getElementById(section)
@@ -23,7 +22,7 @@ export default function Navbar() {
       })
       if (current) setActiveSection(current)
     }
-    
+
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -42,70 +41,86 @@ export default function Navbar() {
     <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'glass shadow-2xl py-2' : 'py-4'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <a href="#home" className="text-2xl font-bold relative group overflow-visible">
-            <span className="relative inline-flex items-center justify-center w-16 h-8">
-              {/* Center M with ping effect and color change */}
-              <span className="absolute inset-0 flex items-center justify-center">
-                <span className="text-purple-400 animate-ping opacity-20 text-2xl">M</span>
-              </span>
-              {/* Main M with color animation */}
-              <span className="relative text-2xl z-10 animate-color-shift">M</span>
-              {/* Orbiting A */}
-              <span className="absolute left-1/2 top-1/2 animate-orbit text-cyan-400 text-xl font-bold">A</span>
+
+          {/* Logo — clean monogram, no orbit chaos */}
+          <a href="#home" className="group flex items-center gap-2">
+            <div className="relative w-9 h-9 flex items-center justify-center">
+              {/* Soft pulsing ring */}
+              <span className="absolute inset-0 rounded-lg bg-gradient-to-br from-purple-500/30 to-blue-500/30 group-hover:from-purple-500/50 group-hover:to-blue-500/50 transition-all duration-500 animate-pulse-slow"></span>
+              <span className="relative z-10 text-base font-black gradient-text">MA</span>
+            </div>
+            <span className="hidden sm:block text-sm font-semibold text-gray-300 group-hover:text-white transition-colors">
+              Ali Ahmad
             </span>
-            {/* Final A with color animation */}
-            <span className="text-2xl ml-1 group-hover:scale-110 transition-transform inline-block animate-color-shift">A</span>
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 group-hover:w-full transition-all duration-300"></span>
           </a>
-          
+
+          {/* Desktop nav */}
           <div className="hidden md:flex space-x-1">
             {navLinks.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href} 
-                className={`px-4 py-2 rounded-lg transition-all duration-300 relative group ${
-                  activeSection === link.href.slice(1) 
-                    ? 'text-white font-semibold' 
-                    : 'text-gray-300 hover:text-white'
+              <a
+                key={link.name}
+                href={link.href}
+                className={`px-4 py-2 rounded-lg transition-all duration-300 relative group text-sm ${
+                  activeSection === link.href.slice(1)
+                    ? 'text-white font-semibold'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 {link.name}
-                <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-300 ${
-                  activeSection === link.href.slice(1) ? 'w-full' : 'w-0 group-hover:w-full'
+                <span className={`absolute bottom-1 left-1/2 -translate-x-1/2 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full transition-all duration-300 ${
+                  activeSection === link.href.slice(1) ? 'w-4' : 'w-0 group-hover:w-4'
                 }`}></span>
               </a>
             ))}
           </div>
 
-          <button 
-            onClick={() => setIsOpen(!isOpen)} 
-            className="md:hidden text-white p-2 hover:bg-purple-500/20 rounded-lg transition-all hover:scale-110 hover:rotate-90 duration-300"
+          {/* Hire me CTA — desktop */}
+          <a
+            href="#contact"
+            className="hidden md:inline-flex gradient-bg px-4 py-2 rounded-lg text-sm font-semibold items-center gap-1.5 hover:scale-105 transition-all"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            Hire Me
+          </a>
+
+          {/* Mobile burger */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden text-white p-2 hover:bg-purple-500/20 rounded-lg transition-all"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
+      {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden glass animate-slideDown">
-          <div className="px-2 pt-2 pb-3 space-y-1">
+        <div className="md:hidden glass animate-slideDown border-t border-white/5">
+          <div className="px-3 pt-2 pb-4 space-y-1">
             {navLinks.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href} 
-                onClick={() => setIsOpen(false)} 
-                className={`block px-4 py-3 rounded-lg transition-all relative group ${
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-sm ${
                   activeSection === link.href.slice(1)
-                    ? 'text-white font-semibold'
-                    : 'text-gray-300 hover:text-white hover:bg-purple-500/10'
+                    ? 'text-white font-semibold bg-purple-500/10'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
                 }`}
               >
+                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${activeSection === link.href.slice(1) ? 'bg-purple-400' : 'bg-gray-600'}`}></span>
                 {link.name}
-                <span className={`absolute bottom-0 left-4 right-4 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-300 ${
-                  activeSection === link.href.slice(1) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                }`}></span>
               </a>
             ))}
+            <div className="pt-2 border-t border-white/5 mt-2">
+              <a
+                href="#contact"
+                onClick={() => setIsOpen(false)}
+                className="w-full gradient-bg px-4 py-3 rounded-lg text-sm font-semibold flex items-center justify-center"
+              >
+                Hire Me
+              </a>
+            </div>
           </div>
         </div>
       )}

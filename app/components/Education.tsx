@@ -25,10 +25,10 @@ export default function Education() {
   return (
     <section id="education" ref={sectionRef} className="py-20 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 gradient-text animate-on-scroll">
-          Education
-        </h2>
-        <p className="text-center text-gray-400 mb-16 animate-on-scroll">Academic background and qualifications</p>
+        <div className="mb-16 animate-on-scroll">
+          <p className="text-center text-xs font-semibold uppercase tracking-widest text-purple-400 mb-3">Academic background</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-center gradient-text">Education</h2>
+        </div>
         
         <div className="max-w-4xl mx-auto">
           <div className="glass p-8 md:p-10 rounded-2xl hover-lift animate-on-scroll relative overflow-hidden">

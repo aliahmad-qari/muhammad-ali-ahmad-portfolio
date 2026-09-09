@@ -77,12 +77,17 @@ export default function Contact() {
   return (
     <section id="contact" ref={sectionRef} className="py-20 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 gradient-text animate-on-scroll">
-          Let's Work Together
-        </h2>
-        <p className="text-center text-gray-400 mb-16 animate-on-scroll">
-          Open to opportunities with international companies. Contact me to discuss your web development needs.
-        </p>
+        <div className="mb-16 animate-on-scroll">
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="h-px w-12 bg-gradient-to-r from-transparent to-purple-500"></div>
+            <span className="text-xs font-semibold uppercase tracking-widest text-purple-400">Let's connect</span>
+            <div className="h-px w-12 bg-gradient-to-l from-transparent to-purple-500"></div>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-center gradient-text mb-3">Let's Work Together</h2>
+          <p className="text-center text-gray-400 text-sm">
+            Open to opportunities with international companies. Contact me to discuss your web development needs.
+          </p>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
           {/* Contact Info */}
