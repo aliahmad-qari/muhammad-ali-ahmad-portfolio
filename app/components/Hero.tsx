@@ -61,7 +61,7 @@ export default function Hero() {
             </h1>
 
             <p className="text-lg text-gray-300 mb-3 animate-fadeIn" style={{ animationDelay: '0.6s', opacity: 0, animationFillMode: 'forwards' }}>
-              Building <span className="gradient-text font-semibold">Scalable Web & SaaS Applications</span> for international clients — React, Next.js, Node.js & MongoDB.
+              Building <span className="gradient-text font-semibold">Scalable Web & SaaS Applications</span> — and shipping <span className="text-cyan-400 font-semibold">AI Automation</span> & <span className="text-pink-400 font-semibold">Email Marketing</span> systems for international clients.
             </p>
 
             <div className="flex items-center gap-2 mb-8 text-gray-500 text-sm animate-fadeIn" style={{ animationDelay: '0.7s', opacity: 0, animationFillMode: 'forwards' }}>

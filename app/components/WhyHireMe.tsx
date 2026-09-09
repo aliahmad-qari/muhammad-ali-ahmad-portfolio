@@ -1,5 +1,5 @@
 'use client'
-import { ShieldCheck, Layers, Globe, Plug, Zap, Code2, ArrowRight } from 'lucide-react'
+import { ShieldCheck, Layers, Globe, Plug, Zap, Code2, BrainCircuit, ArrowRight } from 'lucide-react'
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 
 const reasons = [
@@ -9,6 +9,7 @@ const reasons = [
     desc: 'Every project is built with scalability, security, and maintainability in mind — not just to demo.',
     color: 'from-green-500 to-emerald-500',
     iconColor: 'text-green-400',
+    highlight: false,
   },
   {
     icon: <Layers size={22} />,
@@ -16,6 +17,15 @@ const reasons = [
     desc: '3+ years building multi-tenant SaaS platforms, dashboards, and subscription-based systems.',
     color: 'from-blue-500 to-cyan-500',
     iconColor: 'text-blue-400',
+    highlight: false,
+  },
+  {
+    icon: <BrainCircuit size={22} />,
+    title: 'AI Integration & Automation',
+    desc: 'I don\'t just integrate AI — I build full automation pipelines: OpenAI agents, n8n/Make workflows, email marketing systems, and intelligent document processing that run without human intervention.',
+    color: 'from-violet-500 to-cyan-500',
+    iconColor: 'text-violet-400',
+    highlight: true,
   },
   {
     icon: <Globe size={22} />,
@@ -23,6 +33,7 @@ const reasons = [
     desc: 'Proven track record working with international teams across different time zones and cultures.',
     color: 'from-purple-500 to-pink-500',
     iconColor: 'text-purple-400',
+    highlight: false,
   },
   {
     icon: <Plug size={22} />,
@@ -30,6 +41,7 @@ const reasons = [
     desc: 'Stripe, PayPal, OAuth, third-party APIs, payment gateways — seamlessly integrated and tested.',
     color: 'from-orange-500 to-red-500',
     iconColor: 'text-orange-400',
+    highlight: false,
   },
   {
     icon: <Zap size={22} />,
@@ -37,6 +49,7 @@ const reasons = [
     desc: 'Optimized APIs, lazy loading, caching strategies, and database query tuning for fast apps.',
     color: 'from-yellow-500 to-orange-500',
     iconColor: 'text-yellow-400',
+    highlight: false,
   },
   {
     icon: <Code2 size={22} />,
@@ -44,6 +57,7 @@ const reasons = [
     desc: 'Readable, maintainable, well-structured code with proper separation of concerns and documentation.',
     color: 'from-indigo-500 to-purple-500',
     iconColor: 'text-indigo-400',
+    highlight: false,
   },
 ]
 
@@ -61,7 +75,7 @@ export default function WhyHireMe() {
             <div className="relative z-10">
               <p className="text-xs font-semibold uppercase tracking-widest text-purple-400 mb-1">The differentiator</p>
               <h2 className="text-3xl md:text-4xl font-bold text-white">Why hire me?</h2>
-              <p className="text-gray-400 text-sm mt-1">Six concrete reasons — not buzzwords.</p>
+              <p className="text-gray-400 text-sm mt-1">Full-stack dev + AI automation + email marketing — one developer, full capability.</p>
             </div>
             <a
               href="#contact"
@@ -77,9 +91,18 @@ export default function WhyHireMe() {
           {reasons.map((item, index) => (
             <div
               key={index}
-              className="glass rounded-xl overflow-hidden hover-lift animate-on-scroll group"
+              className={`glass rounded-xl overflow-hidden hover-lift animate-on-scroll group ${
+                item.highlight
+                  ? 'border border-violet-500/30 hover:border-violet-500/50'
+                  : 'border border-white/5'
+              }`}
               style={{ animationDelay: `${index * 0.07}s` }}
             >
+              {/* Highlight top bar */}
+              {item.highlight && (
+                <div className="h-px bg-gradient-to-r from-transparent via-violet-500/60 to-transparent"></div>
+              )}
+
               <div className="flex items-start md:items-center gap-5 p-5">
                 {/* Step number */}
                 <div className="flex-shrink-0 w-10 h-10 rounded-lg glass flex items-center justify-center text-xs font-bold text-gray-500 group-hover:text-purple-400 transition-colors border border-white/5">
@@ -87,14 +110,19 @@ export default function WhyHireMe() {
                 </div>
 
                 {/* Icon */}
-                <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br ${item.color} bg-opacity-10 relative overflow-hidden`}>
+                <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center relative overflow-hidden`}>
                   <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-15`}></div>
                   <span className={`relative z-10 ${item.iconColor}`}>{item.icon}</span>
                 </div>
 
                 {/* Title */}
-                <div className="flex-shrink-0 w-48 hidden sm:block">
-                  <h3 className="text-sm font-bold group-hover:text-purple-400 transition-colors">{item.title}</h3>
+                <div className={`flex-shrink-0 hidden sm:block ${item.highlight ? 'w-56' : 'w-48'}`}>
+                  <h3 className={`text-sm font-bold transition-colors ${item.highlight ? 'text-violet-300 group-hover:text-violet-200' : 'group-hover:text-purple-400'}`}>
+                    {item.title}
+                  </h3>
+                  {item.highlight && (
+                    <span className="text-[10px] font-semibold text-violet-400/70 uppercase tracking-wider">AI · Automation · Email</span>
+                  )}
                 </div>
 
                 {/* Divider */}
@@ -102,8 +130,9 @@ export default function WhyHireMe() {
 
                 {/* Description */}
                 <div className="flex-1 min-w-0">
-                  {/* Mobile title (shown only on sm and below) */}
-                  <h3 className="text-sm font-bold group-hover:text-purple-400 transition-colors mb-1 sm:hidden">{item.title}</h3>
+                  <h3 className={`text-sm font-bold transition-colors mb-1 sm:hidden ${item.highlight ? 'text-violet-300' : 'group-hover:text-purple-400'}`}>
+                    {item.title}
+                  </h3>
                   <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
                 </div>
 
