@@ -45,7 +45,7 @@ export default function Hero() {
           <div className="order-2 md:order-1 animate-slideUp">
             <div className="flex items-center gap-2 mb-4 animate-fadeIn">
               <Sparkles className="text-purple-400 animate-pulse" size={20} />
-              <span className="text-purple-400 font-medium text-sm tracking-wide uppercase">Full-Stack Developer</span>
+              <span className="text-purple-400 font-medium text-sm tracking-wide uppercase">MERN Stack Specialist · Full-Stack Developer</span>
             </div>
 
             <h1 className="text-5xl md:text-7xl font-bold mb-4 leading-tight">
@@ -61,7 +61,7 @@ export default function Hero() {
             </h1>
 
             <p className="text-lg text-gray-300 mb-3 animate-fadeIn" style={{ animationDelay: '0.6s', opacity: 0, animationFillMode: 'forwards' }}>
-              Building <span className="gradient-text font-semibold">Scalable Web & SaaS Applications</span> — and shipping <span className="text-cyan-400 font-semibold">AI Automation</span> & <span className="text-pink-400 font-semibold">Email Marketing</span> systems for international clients.
+              Building <span className="gradient-text font-semibold">Scalable Web, SaaS & WordPress</span> applications — and shipping <span className="text-cyan-400 font-semibold">AI Automation</span> & <span className="text-pink-400 font-semibold">Email Marketing</span> systems for international clients.
             </p>
 
             <div className="flex items-center gap-2 mb-8 text-gray-500 text-sm animate-fadeIn" style={{ animationDelay: '0.7s', opacity: 0, animationFillMode: 'forwards' }}>

@@ -1,5 +1,5 @@
 'use client'
-import { Monitor, LayoutDashboard, Server, Bot, CreditCard, Settings2, Layers, Mail, Workflow, BrainCircuit } from 'lucide-react'
+import { Monitor, LayoutDashboard, Server, Bot, CreditCard, Settings2, Layers, Mail, Workflow, BrainCircuit, Globe } from 'lucide-react'
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 
 const services = [
@@ -17,6 +17,14 @@ const services = [
     desc: 'Multi-tenant SaaS systems with subscription management, role-based access, and scalable architecture.',
     color: 'from-purple-500 to-pink-500',
     iconColor: 'text-purple-400',
+    tag: null,
+  },
+  {
+    icon: <Globe size={32} />,
+    title: 'WordPress Development',
+    desc: 'Custom WordPress sites, WooCommerce stores, Elementor page builds, plugin configuration, cPanel hosting setup, domain management via Namecheap, SSL, and full site migration.',
+    color: 'from-sky-500 to-blue-500',
+    iconColor: 'text-sky-400',
     tag: null,
   },
   {
@@ -86,7 +94,7 @@ export default function Services() {
         <div className="mb-16 animate-on-scroll">
           <p className="text-center text-xs font-semibold uppercase tracking-widest text-purple-400 mb-3">What I offer</p>
           <h2 className="text-4xl md:text-5xl font-bold text-center gradient-text">Services I Provide</h2>
-          <p className="text-center text-gray-400 mt-3 text-sm">Full-stack development · AI automation · Email marketing — all under one roof</p>
+          <p className="text-center text-gray-400 mt-3 text-sm">Full-stack · MERN Stack · WordPress · AI automation · Email marketing — all under one roof</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
