@@ -58,7 +58,7 @@ const projects: Project[] = [
     description:
       'Full-stack affiliate marketing platform for financial campaigns. Partner registration, referral tracking, campaign management, customer lead capture, wallet & earnings tracking, and admin panel for lead verification and payout management. Live platform statistics and customer enquiry forms.',
     tech: ['React', 'TypeScript', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS'],
-    link: 'https://ved-affaliate-marketing.vercel.app/',
+    link: 'https://vedaffiliatepvtltd.com/',
     github: null,
     gradient: 'from-amber-500 to-orange-600',
     category: 'Client Delivered · Affiliate / Fintech',

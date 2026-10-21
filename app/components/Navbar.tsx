@@ -86,8 +86,8 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             {/* Download Resume Button - Desktop */}
             <a
-              href="/Muhammad-Ali-Ahmad-FullStackDev-Resume.pdf"
-              download="Muhammad-Ali-Ahmad-FullStackDev-Resume.pdf"
+              href="/Muhammad-Ali-Ahmad-FullStackAndAIENG-Resume.pdf"
+              download="Muhammad-Ali-Ahmad-FullStackAndAIENG-Resume.pdf"
               className="hidden sm:inline-flex gradient-bg px-4 py-2 rounded-lg text-sm font-semibold text-white items-center gap-2 hover:scale-105 transition-transform"
             >
               <FileText size={16} />
@@ -126,8 +126,8 @@ export default function Navbar() {
               </a>
             ))}
             <a
-              href="/Muhammad-Ali-Ahmad-FullStackDev-Resume.pdf"
-              download="Muhammad-Ali-Ahmad-FullStackDev-Resume.pdf"
+              href="/Muhammad-Ali-Ahmad-FullStackAndAIENG-Resume.pdf"
+              download="Muhammad-Ali-Ahmad-FullStackAndAIENG-Resume.pdf"
               className="gradient-bg px-4 py-3 rounded-lg text-sm font-semibold text-white inline-flex items-center gap-2 mt-4 w-full justify-center"
             >
               <FileText size={16} />

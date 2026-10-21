@@ -7,7 +7,7 @@ export default function Experience() {
 
   const jobs = [
     {
-      role: 'Full Stack Developer',
+      role: 'Full Stack Developer & AI Automation Engineer',
       company: 'SOL Business Consultant',
       url: 'https://www.solbusinessconsultant.com.au/',
       period: 'Dec 2025 – Present',
