@@ -4,7 +4,7 @@ import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 
 export default function Resume() {
   const sectionRef = useIntersectionObserver()
-  const resumePath = '/Muhammad-Ali-Ahmad-FullStackDev-Resume.pdf'
+  const resumePath = '/Muhammad-Ali-Ahmad-FullStackAndAIENG-Resume.pdf'
 
   const resumeHighlights = [
     {
@@ -68,7 +68,7 @@ export default function Resume() {
 
                 {/* Document Info */}
                 <div className="text-center mb-6">
-                  <p className="text-sm font-semibold text-slate-300 mb-1">Muhammad-Ali-Ahmad-FullStackDev-Resume.pdf</p>
+                  <p className="text-sm font-semibold text-slate-300 mb-1">Muhammad-Ali-Ahmad-FullStackAndAIENG-Resume.pdf</p>
                   <p className="text-xs text-slate-500">Professional resume • Always up to date</p>
                 </div>
 
@@ -92,7 +92,7 @@ export default function Resume() {
               <p className="text-sm font-semibold text-slate-400 mb-3 uppercase tracking-widest">Download Resume</p>
               <a
                 href={resumePath}
-                download="Muhammad-Ali-Ahmad-FullStackDev-Resume.pdf"
+                download="Muhammad-Ali-Ahmad-FullStackAndAIENG-Resume.pdf"
                 className="gradient-bg w-full px-8 py-5 rounded-lg font-bold text-white inline-flex items-center justify-center gap-3 hover:scale-105 transition-transform shadow-lg shadow-electric-500/30"
               >
                 <Download size={22} />
