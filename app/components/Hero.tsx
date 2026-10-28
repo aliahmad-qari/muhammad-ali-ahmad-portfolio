@@ -1,192 +1,87 @@
-'use client'
 import Image from 'next/image'
-import { Download, ArrowRight, Briefcase, Mail, Code2, Zap } from 'lucide-react'
-import { useEffect, useRef } from 'react'
+import Link from 'next/link'
+import { ArrowDown, ArrowRight, Code2, Download, MapPin } from 'lucide-react'
+import { projects } from '../data/projects'
+import { resume } from '../config/site'
+
+const capabilities = ['React & Next.js', 'Node.js', 'TypeScript', 'AI & Automation']
 
 export default function Hero() {
-  const particlesRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const container = particlesRef.current
-    if (!container) return
-
-    const fragment = document.createDocumentFragment()
-    for (let i = 0; i < 50; i++) {
-      const p = document.createElement('div')
-      p.className = 'particle'
-      p.style.left = Math.random() * 100 + '%'
-      p.style.animationDelay = Math.random() * 20 + 's'
-      p.style.animationDuration = Math.random() * 10 + 15 + 's'
-      fragment.appendChild(p)
-    }
-    container.appendChild(fragment)
-
-    return () => {
-      while (container.firstChild) container.removeChild(container.firstChild)
-    }
-  }, [])
-
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
-      {/* Particle background */}
-      <div ref={particlesRef} className="particles" aria-hidden="true"></div>
+    <section id="home" aria-labelledby="hero-title" className="relative isolate overflow-hidden bg-navy-950 pt-32 pb-14 sm:pt-40 sm:pb-20 lg:min-h-[850px] lg:flex lg:items-center">
+      {/* Local vector artwork stays crisp and has no external image dependency. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[url('/hero-tech.svg')] bg-cover bg-right opacity-70" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/90 to-navy-950/20" />
+        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy-950 to-transparent" />
+      </div>
 
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-subtle pointer-events-none"></div>
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-electric-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left — Text Content */}
-          <div className="space-y-8 animate-slideUp">
-            {/* Availability Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-electric-500/10 border border-electric-500/30 rounded-full text-sm text-electric-400 w-fit">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full rounded-full bg-electric-400 opacity-75 animate-pulse"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-electric-500"></span>
-              </span>
-              Available for Remote & Contract Opportunities
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+          <div>
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-electric-400/25 bg-electric-500/10 px-3.5 py-2 text-xs sm:text-sm text-electric-400">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" aria-hidden="true" />
+              Open to remote roles & freelance projects
             </div>
 
-            {/* Main Headline */}
-            <div className="space-y-4">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-                <span className="block text-slate-100">Building Digital</span>
-                <span className="block gradient-text">Products That Move</span>
-                <span className="block text-slate-100">Businesses Forward</span>
-              </h1>
-
-              {/* Tagline */}
-              <p className="text-xl text-slate-300 font-medium flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1">
-                  <Code2 size={20} className="text-electric-400" />
-                  Full Stack Developer
-                </span>
-                <span className="text-slate-600">·</span>
-                <span className="text-electric-400">MERN Stack</span>
-                <span className="text-slate-600">·</span>
-                <span className="text-cyan-400">WordPress</span>
-                <span className="text-slate-600">·</span>
-                <span className="text-violet-400">AI Automation</span>
-              </p>
-            </div>
-
-            {/* Description */}
-            <p className="text-lg text-slate-400 leading-relaxed max-w-xl">
-              I build scalable web applications, SaaS platforms, and business solutions with modern technologies. Specialized in MERN stack, WordPress development, AI integrations, and workflow automation for international clients.
+            <p className="mt-7 text-sm font-semibold uppercase tracking-[0.18em] text-slate-300">Muhammad Ali Ahmad</p>
+            <h1 id="hero-title" className="mt-4 max-w-2xl text-[2.7rem] leading-[1.1] font-bold tracking-[-0.045em] text-slate-100 sm:text-6xl lg:text-[4rem] xl:text-[4.5rem]">
+              Building software.<br />
+              <span className="gradient-text">Solving business problems.</span>
+            </h1>
+            <p className="mt-6 text-lg sm:text-xl font-medium text-slate-200">Full Stack Developer & AI Automation Engineer</p>
+            <p className="mt-4 max-w-xl text-base sm:text-lg leading-relaxed text-slate-400">
+              I build web applications, SaaS platforms, and connected workflows with React, Next.js, and Node.js. From the first idea to launch, I help turn business requirements into useful digital products.
             </p>
 
-            {/* Quick Stats */}
-            <div className="flex flex-wrap gap-6 py-6 border-t border-b border-slate-700/50">
-              <div className="space-y-1">
-                <p className="text-3xl font-bold gradient-text">3+</p>
-                <p className="text-sm text-slate-400">Years Experience</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-3xl font-bold gradient-text">25+</p>
-                <p className="text-sm text-slate-400">Projects Delivered</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-3xl font-bold gradient-text">100%</p>
-                <p className="text-sm text-slate-400">Client Satisfaction</p>
-              </div>
+            <div className="mt-6 flex flex-wrap gap-2" aria-label="Core technologies">
+              {capabilities.map(item => <span key={item} className="rounded-md border border-slate-700/80 bg-slate-900/70 px-3 py-1.5 text-xs font-medium text-slate-300">{item}</span>)}
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4 pt-4">
-              {/* Primary CTA */}
-              <a
-                href="#projects"
-                className="gradient-bg px-7 py-3 rounded-lg font-semibold text-white inline-flex items-center gap-2 hover:scale-105 transition-transform"
-              >
-                View My Projects <ArrowRight size={18} />
-              </a>
-
-              {/* Secondary CTA */}
-              <a
-                href="#contact"
-                className="px-7 py-3 rounded-lg font-semibold text-electric-400 inline-flex items-center gap-2 border border-electric-500/50 hover:bg-electric-500/10 transition-all"
-              >
-                <Mail size={18} />
-                Get In Touch
-              </a>
-
-              {/* Resume Download */}
-              <a
-                href="/Muhammad-Ali-Ahmad-FullStackDev-Resume.pdf"
-                download="Muhammad-Ali-Ahmad-FullStackDev-Resume.pdf"
-                className="px-7 py-3 rounded-lg font-semibold text-slate-300 inline-flex items-center gap-2 border border-slate-700 hover:border-slate-600 hover:bg-slate-800/50 transition-all"
-              >
-                <Download size={18} />
-                Download Resume
-              </a>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link href="/#featured-projects" className="gradient-bg inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3.5 text-sm font-semibold text-white">
+                Explore my work <ArrowRight size={17} aria-hidden="true" />
+              </Link>
+              <Link href="/hire-me" className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-600 bg-slate-900/50 px-6 py-3.5 text-sm font-semibold text-slate-200 transition-colors hover:border-electric-400 hover:text-white">
+                Let's work together
+              </Link>
             </div>
+            <a href={resume.path} download={resume.filename} className="mt-5 inline-flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-electric-400">
+              <Download size={15} aria-hidden="true" /> Download resume
+            </a>
+
+            <dl className="mt-8 flex flex-wrap gap-x-8 gap-y-4 border-t border-slate-700/60 pt-6">
+              <div><dt className="text-xs text-slate-400">Experience</dt><dd className="mt-1 text-xl font-semibold text-slate-100">3+ years</dd></div>
+              <div><dt className="text-xs text-slate-400">Projects in portfolio</dt><dd className="mt-1 text-xl font-semibold text-slate-100">{projects.length}</dd></div>
+              <div><dt className="text-xs text-slate-400">Based in</dt><dd className="mt-1 flex items-center gap-1.5 text-sm font-medium text-slate-200"><MapPin size={14} className="text-electric-400" aria-hidden="true" />Multan, Pakistan</dd></div>
+            </dl>
           </div>
 
-          {/* Right — Visual */}
-          <div className="relative h-96 md:h-full min-h-96 animate-float">
-            {/* Code Editor Mockup Background */}
-            <div className="absolute inset-0 rounded-2xl overflow-hidden">
-              {/* Dark gradient background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-navy-800 via-navy-900 to-navy-950"></div>
-
-              {/* Grid pattern overlay */}
-              <div
-                className="absolute inset-0 opacity-5"
-                style={{
-                  backgroundImage:
-                    'linear-gradient(rgba(14, 165, 233, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(14, 165, 233, 0.2) 1px, transparent 1px)',
-                  backgroundSize: '50px 50px',
-                }}
-              ></div>
-
-              {/* Glowing orbs */}
-              <div className="absolute top-10 right-10 w-32 h-32 bg-electric-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
-              <div className="absolute bottom-10 left-10 w-40 h-40 bg-cyan-500/15 rounded-full blur-3xl animate-pulse-slow"></div>
-
-              {/* Code lines visual */}
-              <div className="absolute inset-0 flex items-center justify-center p-8">
-                <div className="space-y-4 w-full">
-                  <div className="h-2 bg-electric-500/30 rounded w-3/4"></div>
-                  <div className="h-2 bg-electric-500/20 rounded"></div>
-                  <div className="h-2 bg-electric-500/25 rounded w-5/6"></div>
-                  <div className="mt-6 space-y-3">
-                    <div className="h-1.5 bg-cyan-500/25 rounded w-2/3"></div>
-                    <div className="h-1.5 bg-cyan-500/20 rounded"></div>
-                    <div className="h-1.5 bg-cyan-500/30 rounded w-4/5"></div>
-                  </div>
+          <div className="relative mx-auto w-full max-w-[430px] lg:ml-auto lg:mr-0">
+            <div aria-hidden="true" className="absolute -inset-5 rounded-[2.5rem] bg-electric-500/10 blur-2xl" />
+            <div className="relative rounded-[1.75rem] border border-electric-400/30 bg-slate-900/80 p-3 shadow-[0_24px_80px_rgba(0,0,0,0.35)]">
+              <div className="flex items-center justify-between gap-3 px-2 pb-3 pt-1 text-[10px] font-medium uppercase tracking-[0.16em] text-slate-400">
+                <span className="flex items-center gap-2"><Code2 size={14} className="text-electric-400" aria-hidden="true" />Developer profile</span>
+                <span className="text-electric-400">Web / AI / Automation</span>
+              </div>
+              {/* An explicit aspect ratio gives the fill image a reliable height at every breakpoint. */}
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.1rem] bg-slate-800">
+                <Image src="/ali2.jpeg" alt="Muhammad Ali Ahmad, Full Stack Developer" fill priority sizes="(max-width: 480px) calc(100vw - 56px), (max-width: 1023px) 404px, 33vw" className="object-cover object-top" />
+                <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+                  <p className="text-2xl font-semibold tracking-tight text-white">Muhammad Ali Ahmad</p>
+                  <p className="mt-1.5 text-sm text-slate-300">Full Stack Developer</p>
+                  <div className="mt-4 flex items-center gap-2 text-xs text-electric-400"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />Available for a conversation</div>
                 </div>
               </div>
-
-              {/* Border glow */}
-              <div className="absolute inset-0 rounded-2xl border border-electric-500/20 shadow-electric"></div>
             </div>
-
-            {/* Your Photo - Circular overlay */}
-            <div className="absolute bottom-4 right-4 w-48 h-48 rounded-full overflow-hidden border-2 border-electric-500/40 shadow-lg shadow-electric-500/20">
-              <Image
-                src="/ali2.jpeg"
-                alt="Muhammad Ali Ahmad"
-                fill
-                className="object-cover"
-                priority
-              />
-              {/* Glow effect on photo */}
-              <div className="absolute inset-0 bg-gradient-to-t from-electric-500/20 to-transparent"></div>
+            <div className="relative mx-5 -mt-1 rounded-b-xl border border-t-0 border-slate-700/70 bg-slate-900 px-5 py-3.5 flex items-center justify-between gap-3">
+              <span className="text-xs text-slate-400">From requirements to deployment</span>
+              <Code2 size={17} className="shrink-0 text-electric-400" aria-hidden="true" />
             </div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-sm text-slate-500">Scroll to explore</span>
-            <div className="w-6 h-10 border border-electric-500/30 rounded-full flex items-center justify-center">
-              <div className="w-1 h-2 bg-electric-500 rounded-full animate-pulse"></div>
-            </div>
-          </div>
-        </div>
+        <a href="#featured-projects" className="mt-10 inline-flex items-center gap-2 text-xs text-slate-500 hover:text-electric-400 lg:mt-12"><ArrowDown size={14} aria-hidden="true" />Discover selected work</a>
       </div>
     </section>
   )

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { siteUrl } from './config/site'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -8,7 +9,7 @@ const inter = Inter({
   variable: '--font-inter',
 })
 
-const BASE_URL = 'https://muhammadaliahmad.dev'
+const BASE_URL = siteUrl
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -36,14 +37,14 @@ export const metadata: Metadata = {
     title: 'Muhammad Ali Ahmad — Full Stack Developer | MERN | SaaS',
     description:
       'Full Stack Developer with 3+ years building scalable SaaS platforms and production-ready web applications. Available for remote opportunities worldwide.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Muhammad Ali Ahmad — Full Stack Developer' }],
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Muhammad Ali Ahmad — Full Stack Developer' }],
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Muhammad Ali Ahmad — Full Stack Developer | MERN | SaaS',
     description: 'Full Stack Developer with 3+ years building scalable SaaS platforms. Available for remote opportunities.',
-    images: ['/og-image.png'],
+    images: ['/opengraph-image'],
     creator: '@muhammadaliahmad',
   },
   icons: {
@@ -59,7 +60,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}><a className="skip-link" href="#main-content">Skip to content</a>{children}</body>
     </html>
   )
 }

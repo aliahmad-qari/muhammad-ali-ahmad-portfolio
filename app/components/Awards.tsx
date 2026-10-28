@@ -7,8 +7,8 @@ const awards = [
     icon: <Trophy size={28} />,
     title: 'Employee of the Year',
     issuer: 'ClickTake Technologies',
-    year: '2025',
-    description: 'Recognized for outstanding contributions to project delivery, team collaboration, and exceptional development excellence.',
+    year: '',
+    description: 'Employee of the Year recognition listed in the supplied resume.',
     color: 'from-yellow-500 to-amber-500',
   },
   {
@@ -35,7 +35,7 @@ export default function Awards() {
             <span className="gradient-text">Certifications</span>
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl">
-            Professional recognition and credentials earned through dedication and excellence.
+            Training and recognition listed in the supplied resume.
           </p>
         </div>
 
@@ -67,9 +67,9 @@ export default function Awards() {
                     <h3 className="text-xl font-bold text-slate-100 group-hover:text-electric-400 transition-colors">
                       {award.title}
                     </h3>
-                    <span className={`text-xs font-bold px-3 py-1 rounded-full bg-gradient-to-r ${award.color} bg-opacity-10 text-slate-300`}>
+                    {award.year && <span className={`text-xs font-bold px-3 py-1 rounded-full bg-gradient-to-r ${award.color} bg-opacity-10 text-slate-300`}>
                       {award.year}
-                    </span>
+                    </span>}
                   </div>
                   <p className="text-electric-400 font-semibold text-sm mb-3">
                     {award.issuer}

@@ -1,17 +1,17 @@
 'use client'
 import { useEffect, useRef } from 'react'
 
-export function useIntersectionObserver(threshold = 0.1) {
+export function useIntersectionObserver(threshold = 0) {
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add('visible')
+          if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target) }
         })
       },
-      { threshold }
+      { threshold, rootMargin: '0px 0px -24px 0px' }
     )
 
     const elements = sectionRef.current?.querySelectorAll('.animate-on-scroll')

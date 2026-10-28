@@ -3,200 +3,17 @@ import { ExternalLink, Github, Eye, ArrowUpRight, Briefcase, Filter } from 'luci
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 import { useState } from 'react'
 
-type Portal = {
-  name: string
-  href: string
-}
-
-type Project = {
-  title: string
-  description: string
-  tech: string[]
-  link: string
-  github: string | null
-  gradient: string
-  category: string
-  clientDelivered: boolean
-  featured?: boolean
-  portals?: Portal[]
-}
-
-const LMS_URL = 'https://training.solbusinessconsultant.com.au'
-
-const projects: Project[] = [
-  {
-    title: 'SOL Training Academy',
-    description:
-      'Enterprise Learning Management System for an Australian NDIS training provider. Role-based portals for admins and students, an interactive course player with DRM content protection, per-course discussion boards, and an automated enrollment-expiry reminder engine. Built to scale for thousands of learners.',
-    tech: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'JWT', 'Tailwind CSS'],
-    link: `${LMS_URL}/`,
-    portals: [
-      { name: 'Course Catalog', href: `${LMS_URL}/training-courses` },
-      { name: 'Student Portal', href: `${LMS_URL}/login` },
-      { name: 'Admin Panel', href: `${LMS_URL}/lms-admin` },
-    ],
-    github: null,
-    gradient: 'from-violet-500 to-fuchsia-500',
-    category: 'Client Delivered · Enterprise LMS',
-    clientDelivered: true,
-    featured: true,
-  },
-  {
-    title: 'Palm & Grace Memorials',
-    description:
-      'Digital memorial platform for preserving life stories, photographs, videos, and memories. Features distinctive memorial templates, searchable directory, moderated tributes, service & livestream information, separate family and Care Partner enquiries, and an admin dashboard for managing content, publication, sharing links, and QR codes.',
-    tech: ['React', 'Vite', 'TypeScript', 'Tailwind CSS', 'Node.js', 'Express', 'Prisma', 'PostgreSQL', 'Supabase', 'Cloudinary'],
-    link: 'https://www.palmandgrace.org/',
-    github: null,
-    gradient: 'from-rose-500 to-pink-600',
-    category: 'Client Delivered · Memorial Platform',
-    clientDelivered: true,
-    featured: true,
-  },
-  {
-    title: 'VED Affiliate Marketing Platform',
-    description:
-      'Full-stack affiliate marketing platform for financial campaigns. Partner registration, referral tracking, campaign management, customer lead capture, wallet & earnings tracking, and admin panel for lead verification and payout management. Live platform statistics and customer enquiry forms.',
-    tech: ['React', 'TypeScript', 'Node.js', 'Express', 'MongoDB', 'Tailwind CSS'],
-    link: 'https://vedaffiliatepvtltd.com/',
-    github: null,
-    gradient: 'from-amber-500 to-orange-600',
-    category: 'Client Delivered · Affiliate / Fintech',
-    clientDelivered: true,
-  },
-  {
-    title: 'TMG180 — Freelance Marketplace',
-    description:
-      'Full-featured freelance marketplace where participants browse and connect with skilled workers. Worker profiles, participant portal, advanced search, and structured engagement flow for service matching.',
-    tech: ['React.js', 'Node.js', 'Tailwind CSS', 'MongoDB'],
-    link: 'https://tmg180-web.vercel.app/participant/browse-workers',
-    github: null,
-    gradient: 'from-sky-500 to-indigo-500',
-    category: 'Client Delivered · Marketplace',
-    clientDelivered: true,
-  },
-  {
-    title: 'Quotex Marketing — Candle Probability Lab',
-    description:
-      'Quantitative research platform streaming live Binance candles with deterministic probability-based predictions. Interactive workstation across 7 spot markets, 10 timeframes, immutable prediction locks, and indicator agreement meters (EMA, RSI, MACD).',
-    tech: ['React.js', 'Node.js', 'Binance API', 'WebSocket', 'Tailwind CSS'],
-    link: 'https://quotex-marketing.vercel.app/',
-    github: null,
-    gradient: 'from-orange-500 to-rose-500',
-    category: 'Client Delivered · Fintech / Trading',
-    clientDelivered: true,
-  },
-  {
-    title: 'SOL Business Consultant Hub',
-    description:
-      'Compliance-first consultancy hub for Australian NDIS providers and corporates. Offshore staffing, NDIS registration guidance, bookkeeping, digital transformation, and the SOL Support Academy with three progressive training levels.',
-    tech: ['Next.js', 'React', 'Tailwind CSS', 'SEO', 'TypeScript'],
-    link: 'https://hub.solbusinessconsultant.com.au/',
-    github: null,
-    gradient: 'from-teal-500 to-cyan-500',
-    category: 'Client Delivered · Consultancy / NDIS',
-    clientDelivered: true,
-  },
-  {
-    title: 'Nexus Capital — Investment Platform',
-    description: 'Professional investment platform for a financial services client. Clean, conversion-focused design with daily earnings tracking, investor onboarding flow, and modern UI built for trust and credibility in fintech.',
-    tech: ['React.js', 'Node.js', 'Tailwind CSS'],
-    link: 'https://www.nexuscapitalbusiness.com',
-    github: null,
-    gradient: 'from-emerald-500 to-teal-500',
-    category: 'Client Delivered · Fintech',
-    clientDelivered: true,
-  },
-  {
-    title: 'Trade With Tayyab — LMS',
-    description: 'Premium Learning Management System for a trading academy. Course management, student onboarding, and professional brand identity positioned as high-authority trading education platform.',
-    tech: ['React.js', 'Node.js', 'Tailwind CSS'],
-    link: 'https://www.tradewithtayyab.tech',
-    github: null,
-    gradient: 'from-yellow-500 to-amber-500',
-    category: 'Client Delivered · EdTech',
-    clientDelivered: true,
-  },
-  {
-    title: 'We Care Disability Service',
-    description: 'Professional Australian NDIS disability support services platform with responsive UI, SEO-focused pages, service management structure, and business branding optimization.',
-    tech: ['Next.js', 'React', 'Tailwind CSS', 'SEO', 'TypeScript'],
-    link: 'https://wecaredisabilityservice.com.au/',
-    github: null,
-    gradient: 'from-blue-500 to-cyan-500',
-    category: 'Client Delivered · NDIS',
-    clientDelivered: true,
-  },
-  {
-    title: 'SOL Business Consultant',
-    description: 'Modern business consultancy platform for SaaS solutions, automation systems, NDIS operations, digital business support, and management solutions.',
-    tech: ['Next.js', 'React', 'Node.js', 'Tailwind CSS', 'SEO'],
-    link: 'https://www.solbusinessconsultant.com.au/',
-    github: null,
-    gradient: 'from-purple-500 to-pink-500',
-    category: 'Client Delivered · Consultancy',
-    clientDelivered: true,
-  },
-  {
-    title: 'ClickOpticX WiFi Management',
-    description: 'Online WiFi management SaaS platform with package activation, user data records, and comprehensive admin dashboard.',
-    tech: ['React', 'Node.js', 'MongoDB', 'Express', 'WiFi API'],
-    link: 'https://clickopticx-b7xr.onrender.com/',
-    github: 'https://github.com/aliahmad-qari',
-    gradient: 'from-cyan-500 to-blue-500',
-    category: 'SaaS Platform',
-    clientDelivered: false,
-  },
-  {
-    title: 'Dibnow Repair & Shop SaaS',
-    description: 'Repair & shop management SaaS with authentication, online tracking system, and payment integrations.',
-    tech: ['React', 'Node.js', 'MongoDB', 'Stripe', 'JWT'],
-    link: 'https://dibnow-repair-saas.vercel.app/',
-    github: 'https://github.com/aliahmad-qari',
-    gradient: 'from-blue-500 to-indigo-500',
-    category: 'SaaS Platform',
-    clientDelivered: false,
-  },
-  {
-    title: 'LMS Portal',
-    description: 'Learning Management System with dashboard, course management, and authentication.',
-    tech: ['Next.js', 'MongoDB', 'Tailwind CSS', 'TypeScript'],
-    link: 'https://lms-portal-black-six.vercel.app/',
-    github: 'https://github.com/aliahmad-qari',
-    gradient: 'from-green-500 to-emerald-500',
-    category: 'Web Application',
-    clientDelivered: false,
-  },
-  {
-    title: 'Real Estate Web App',
-    description: 'Modern real estate marketplace with property listings, advanced search filters, pricing integration, and responsive design.',
-    tech: ['Next.js', 'React', 'MongoDB', 'Stripe', 'TypeScript', 'Tailwind CSS'],
-    link: 'https://real-estate-web-app-omega.vercel.app/',
-    github: 'https://github.com/aliahmad-qari',
-    gradient: 'from-amber-500 to-orange-500',
-    category: 'Web Application',
-    clientDelivered: false,
-  },
-  {
-    title: 'MetaCrypto Trading',
-    description: 'Crypto-related responsive web application with modern interface and real-time data.',
-    tech: ['React', 'CSS3', 'API Integration', 'Crypto'],
-    link: 'https://metacryptotrading.vercel.app/',
-    github: 'https://github.com/aliahmad-qari',
-    gradient: 'from-indigo-500 to-purple-500',
-    category: 'Web Application',
-    clientDelivered: false,
-  },
-]
-
+import { projects, type Project } from '../data/projects'
+import { featuredProjects } from '../data/featuredProjects'
 type FilterType = 'all' | 'client'
 
 export default function Projects() {
   const sectionRef = useIntersectionObserver()
   const [activeFilter, setActiveFilter] = useState<FilterType>('all')
 
-  const featuredProjects = projects.filter(p => p.featured)
-  const allProjects = projects.filter(p => {
+  
+  const additionalProjects = projects.filter(p => !featuredProjects.some(featured => featured.id === p.id))
+  const allProjects = additionalProjects.filter(p => {
     if (activeFilter === 'all') return true
     if (activeFilter === 'client') return p.clientDelivered
     return true
@@ -225,7 +42,7 @@ export default function Projects() {
                 <span className="absolute inline-flex h-full w-full rounded-full bg-electric-400 opacity-75 animate-pulse"></span>
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-electric-500"></span>
               </span>
-              Live
+              Project
             </span>
             {project.clientDelivered && (
               <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 border border-amber-500/30 text-amber-400">
@@ -281,7 +98,7 @@ export default function Projects() {
         {/* CTAs */}
         <div className="flex gap-3 mt-auto">
           <a
-            href={project.link}
+            href={project.publicLink || project.link}
             target="_blank"
             rel="noopener noreferrer"
             className="gradient-bg px-4 py-2 rounded-lg text-sm font-semibold text-white inline-flex items-center gap-2 hover:scale-105 transition-transform flex-1 justify-center"
@@ -295,7 +112,7 @@ export default function Projects() {
               rel="noopener noreferrer"
               className="px-4 py-2 rounded-lg text-sm font-semibold text-slate-300 border border-slate-700 hover:border-slate-600 hover:bg-slate-800/50 transition-all inline-flex items-center gap-2"
             >
-              <Github size={15} /> Code
+              <Github size={15} /> GitHub profile
             </a>
           ) : (
             <span className="px-4 py-2 rounded-lg text-sm text-slate-600 border border-slate-700/50 inline-flex items-center gap-2 cursor-default">
@@ -308,28 +125,18 @@ export default function Projects() {
   )
 
   return (
-    <section id="projects" className="py-20 relative">
+    <section id="projects" ref={sectionRef} className="py-16 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-16 animate-on-scroll">
-          <p className="text-xs font-semibold uppercase tracking-widest text-electric-400 mb-3">Featured Work</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-electric-400 mb-3">More Work</p>
           <h2 className="text-4xl md:text-5xl font-bold mb-3">
-            <span className="block text-slate-100">Real projects for</span>
+            <span className="block text-slate-100">More solutions for</span>
             <span className="gradient-text">international clients</span>
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl">
-            25+ projects delivered. From enterprise LMS platforms to memorial sites, fintech systems to SaaS applications—all built to production standards.
+            Explore additional work across learning platforms, business websites, and web applications. Selected case studies appear above.
           </p>
-        </div>
-
-        {/* Featured Projects */}
-        <div className="mb-16 animate-on-scroll">
-          <p className="text-sm font-semibold text-slate-400 mb-6 uppercase tracking-widest">Flagship Projects</p>
-          <div className="grid lg:grid-cols-2 gap-6">
-            {featuredProjects.map((project) => (
-              <ProjectCard key={project.title} project={project} isFeatured={true} />
-            ))}
-          </div>
         </div>
 
         {/* Filter Tabs */}
@@ -343,7 +150,7 @@ export default function Projects() {
             }`}
           >
             <Filter size={14} className="inline mr-2" />
-            All Projects ({allProjects.length})
+            All Projects ({additionalProjects.length})
           </button>
           <button
             onClick={() => setActiveFilter('client')}
@@ -354,13 +161,13 @@ export default function Projects() {
             }`}
           >
             <Briefcase size={14} />
-            Client Delivered ({projects.filter(p => p.clientDelivered).length})
+            Client Delivered ({additionalProjects.filter(p => p.clientDelivered).length})
           </button>
         </div>
 
         {/* All Projects Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 animate-on-scroll">
-          {allProjects.filter(p => !p.featured).map((project) => (
+          {allProjects.filter(p => !p.featured && !p.title.startsWith('VED Affiliate') && !p.title.startsWith('TMG180')).map((project) => (
             <ProjectCard key={project.title} project={project} />
           ))}
         </div>
@@ -368,16 +175,16 @@ export default function Projects() {
         {/* Stats */}
         <div className="mt-16 pt-12 border-t border-slate-700/50 flex flex-wrap gap-8 justify-center text-center animate-on-scroll">
           <div>
-            <p className="text-3xl font-bold gradient-text">{projects.length}+</p>
-            <p className="text-slate-400 text-sm mt-1">Projects</p>
+            <p className="text-3xl font-bold gradient-text">{projects.length}</p>
+            <p className="text-slate-400 text-sm mt-1">Listed projects</p>
           </div>
           <div>
             <p className="text-3xl font-bold gradient-text">{projects.filter(p => p.clientDelivered).length}</p>
             <p className="text-slate-400 text-sm mt-1">Client Delivered</p>
           </div>
           <div>
-            <p className="text-3xl font-bold gradient-text">100%</p>
-            <p className="text-slate-400 text-sm mt-1">Live & Production</p>
+            <p className="text-3xl font-bold gradient-text">{featuredProjects.length}</p>
+            <p className="text-slate-400 text-sm mt-1">Case studies</p>
           </div>
         </div>
       </div>

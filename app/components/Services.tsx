@@ -105,11 +105,10 @@ export default function Services() {
         <div className="mt-16 text-center animate-on-scroll">
           <p className="text-slate-400 mb-6">Ready to build something great?</p>
           <a
-            href="#contact"
+            href="/services"
             className="gradient-bg px-8 py-4 rounded-lg font-semibold text-white inline-flex items-center gap-2 hover:scale-105 transition-transform"
           >
-            Let's Discuss Your Project →
-          </a>
+            Explore Services & Packages</a>
         </div>
       </div>
     </section>

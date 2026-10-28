@@ -10,7 +10,7 @@ export const metadata = {
 
 export default function ProjectLayout({ children }: { children: ReactNode }) {
   return (
-    <main>
+    <main id="main-content" className="pt-20">
       <Navbar />
       <ScrollIndicator />
       {children}

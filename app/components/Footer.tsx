@@ -2,12 +2,13 @@
 import { Github, Linkedin, Mail, ArrowUpRight, Phone } from 'lucide-react'
 
 const quickLinks = [
-  { name: 'About', href: '#about' },
-  { name: 'Skills', href: '#skills' },
-  { name: 'Experience', href: '#experience' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Services', href: '#services' },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Hire Me', href: '/hire-me' },
+  { name: 'Skills', href: '/#skills' },
+  { name: 'Experience', href: '/#experience' },
+  { name: 'Projects', href: '/#featured-projects' },
+  { name: 'Services', href: '/services' },
+  { name: 'Contact', href: '/#contact' },
+  { name: 'Privacy', href: '/privacy' },
 ]
 
 const socialLinks = [
@@ -29,10 +30,10 @@ export default function Footer() {
             <p className="text-gray-400 text-sm">Let's build something great together — available for full-time, freelance & remote.</p>
           </div>
           <a
-            href="#contact"
+            href="/enquiry"
             className="gradient-bg px-7 py-3.5 rounded-lg font-semibold inline-flex items-center gap-2 hover:scale-105 transition-all flex-shrink-0"
           >
-            Get in touch <ArrowUpRight size={18} />
+            Request a quote <ArrowUpRight size={18} />
           </a>
         </div>
       </div>

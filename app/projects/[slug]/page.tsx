@@ -1,3 +1,4 @@
+import TMGCaseStudy from './case-studies/TMG180'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, ExternalLink, Code2, Zap, Target, Users } from 'lucide-react'
@@ -11,6 +12,7 @@ type CaseStudyContent = {
 }
 
 const caseStudies: CaseStudyContent[] = [
+  { slug: 'tmg180', component: TMGCaseStudy },
   { slug: 'sol-training-academy', component: SOLCaseStudy },
   { slug: 'palm-grace-memorials', component: PalmGraceCaseStudy },
   { slug: 'ved-affiliate-marketing', component: VEDCaseStudy },
@@ -27,14 +29,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   if (!study) return { title: 'Not Found' }
 
   const titles: { [key: string]: string } = {
-    'sol-training-academy': 'SOL Training Academy Case Study',
+    'sol-training-academy': 'SOL Business Platform Case Study',
+    'tmg180': 'TMG180 Support & Governance Case Study',
     'palm-grace-memorials': 'Palm & Grace Memorials Case Study',
     'ved-affiliate-marketing': 'VED Affiliate Marketing Platform Case Study',
   }
 
   return {
     title: titles[params.slug] || 'Case Study',
-    description: 'Detailed case study of a featured client project',
+    description: 'Explore the project context and public website for ' + titles[params.slug],
+    alternates: { canonical: '/projects/' + params.slug },
   }
 }
 

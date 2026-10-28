@@ -15,7 +15,7 @@ const clients = [
   {
     name: 'SOL Training Academy',
     url: 'https://training.solbusinessconsultant.com.au/',
-    desc: 'Enterprise MERN learning platform with DRM-protected courses, role-based portals & automated expiry reminders — Australia',
+    desc: 'Learning platform with student dashboards, course administration, and business-service workflows',
     badge: 'Current Client',
     badgeColor: 'bg-green-500/20 text-green-400 border-green-500/30',
     gradient: 'from-violet-500 to-fuchsia-500',

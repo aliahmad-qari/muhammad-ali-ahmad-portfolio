@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" fill="none">
+<defs>
+  <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse"><path d="M64 0H0V64" stroke="#38bdf8" stroke-opacity=".1"/></pattern>
+  <radialGradient id="halo"><stop stop-color="#075985" stop-opacity=".65"/><stop offset="1" stop-color="#0a0e27" stop-opacity="0"/></radialGradient>
+  <linearGradient id="trace" x1="400" y1="150" x2="1500" y2="900" gradientUnits="userSpaceOnUse"><stop stop-color="#38bdf8" stop-opacity=".08"/><stop offset=".55" stop-color="#38bdf8" stop-opacity=".65"/><stop offset="1" stop-color="#22d3ee" stop-opacity=".2"/></linearGradient>
+</defs>
+<path fill="#0a0e27" d="M0 0h1600v1000H0z"/><ellipse cx="1240" cy="430" rx="650" ry="600" fill="url(#halo)"/><path fill="url(#grid)" d="M0 0h1600v1000H0z"/>
+<g stroke="url(#trace)" stroke-width="1.5" stroke-linejoin="round">
+<path d="M650 80h200l100 100h180l90 90h380M750 0v140l90 90v120h190l100 100h470M1600 160h-170l-100 100v160l-130 130h-170l-120 120H650M1600 720h-210l-90-90h-220l-110 110v258M1600 850h-130l-160-160h-150l-100 100v210M1600 580h-100l-110-110V320l-100-100h-120M1080 0v100l100 100h210l80 80h130M650 920h130l90-90v-140l130-130M1600 950h-100l-80-80h-190M1320 0v120l90 90M1020 1000V880l90-90h100"/>
+</g>
+<g fill="#38bdf8" fill-opacity=".65"><circle cx="650" cy="80" r="4"/><circle cx="650" cy="920" r="4"/><circle cx="650" cy="670" r="4"/><circle cx="1170" cy="220" r="4"/><circle cx="1210" cy="790" r="4"/><circle cx="1230" cy="870" r="4"/><circle cx="840" cy="350" r="4"/><circle cx="1410" cy="210" r="4"/></g>
+<g stroke="#22d3ee" stroke-opacity=".2"><circle cx="1200" cy="480" r="250"/><circle cx="1200" cy="480" r="300" stroke-dasharray="4 14"/><path d="M1180 450l-30 30 30 30m40-60 30 30-30 30m-15-70-10 80" stroke-width="3"/></g>
+</svg>

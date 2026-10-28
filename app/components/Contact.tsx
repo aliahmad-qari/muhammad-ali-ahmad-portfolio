@@ -1,5 +1,6 @@
 'use client'
 import { useState, useRef } from 'react'
+import Link from 'next/link'
 import emailjs from '@emailjs/browser'
 import { Mail, Phone, Linkedin, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
@@ -9,10 +10,10 @@ import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 // 2. Create a service (Gmail) → copy Service ID
 // 3. Create an email template → copy Template ID
 // 4. Copy your Public Key from Account → API Keys
-// Replace the three values below with your own:
-const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID'
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID'
-const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY'
+// Configure the NEXT_PUBLIC_EMAILJS_* values in .env.local.
+const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || ''
+const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || ''
+const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || ''
 // ────────────────────────────────────────────────────────────────────────────
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
@@ -42,6 +43,11 @@ export default function Contact() {
     const validationError = validate()
     if (validationError) { setErrorMsg(validationError); setStatus('error'); return }
 
+    if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
+      const body = 'From: ' + formData.name + ' <' + formData.email + '>\n\n' + formData.message
+      window.location.href = 'mailto:ali.islamic.meh1@gmail.com?subject=' + encodeURIComponent(formData.subject || 'Portfolio enquiry') + '&body=' + encodeURIComponent(body)
+      return
+    }
     setStatus('loading')
     setErrorMsg('')
 
@@ -92,7 +98,7 @@ export default function Contact() {
         <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
           {/* Contact Info */}
           <div className="animate-on-scroll">
-            <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
+            <h3 className="text-2xl font-bold mb-6">Contact Information</h3><Link href="/enquiry" className="inline-block mb-6 gradient-bg px-5 py-3 rounded-lg font-semibold">Send a project enquiry</Link>
             <div className="space-y-6">
               {contactInfo.map((item, index) => (
                 <a key={index} href={item.link} target="_blank" rel="noopener noreferrer" className="glass p-5 rounded-xl flex items-center gap-4 hover-lift group relative overflow-hidden">
@@ -119,12 +125,13 @@ export default function Contact() {
 
           {/* Contact Form */}
           <div className="animate-on-scroll">
+            {(!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) && <p className="text-sm text-slate-400 mb-4">This form opens your email app with your message ready to send. You can also use the email link directly.</p>}
             <form ref={formRef} onSubmit={handleSubmit} className="glass p-8 rounded-2xl space-y-5 hover-lift" noValidate>
               {status === 'success' ? (
                 <div className="text-center py-12">
                   <CheckCircle size={64} className="text-green-400 mx-auto mb-4" />
                   <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
-                  <p className="text-gray-400">I'll get back to you within 24 hours.</p>
+                  <p className="text-gray-400">Thank you. I will review your message and respond by email.</p>
                   <button type="button" onClick={() => setStatus('idle')} className="mt-6 gradient-bg px-6 py-2 rounded-lg text-sm font-semibold hover:scale-105 transition-all">
                     Send Another
                   </button>
@@ -144,21 +151,21 @@ export default function Contact() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-semibold mb-2">Name *</label>
-                      <input type="text" name="name" required value={formData.name} onChange={handleChange} className={inputClass} placeholder="Your Name" />
+                      <label htmlFor="contact-name" className="block text-sm font-semibold mb-2">Name *</label>
+                      <input id="contact-name" type="text" name="name" required value={formData.name} onChange={handleChange} className={inputClass} placeholder="Your Name" />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold mb-2">Email *</label>
-                      <input type="email" name="email" required value={formData.email} onChange={handleChange} className={inputClass} placeholder="your@email.com" />
+                      <label htmlFor="contact-email" className="block text-sm font-semibold mb-2">Email *</label>
+                      <input id="contact-email" type="email" name="email" required value={formData.email} onChange={handleChange} className={inputClass} placeholder="your@email.com" />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-2">Subject</label>
-                    <input type="text" name="subject" value={formData.subject} onChange={handleChange} className={inputClass} placeholder="Project inquiry, Job opportunity..." />
+                    <label htmlFor="contact-subject" className="block text-sm font-semibold mb-2">Subject</label>
+                    <input id="contact-subject" type="text" name="subject" value={formData.subject} onChange={handleChange} className={inputClass} placeholder="Project inquiry, Job opportunity..." />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-2">Message *</label>
-                    <textarea name="message" required value={formData.message} onChange={handleChange} rows={5} className={`${inputClass} resize-none`} placeholder="Tell me about your project or opportunity..."></textarea>
+                    <label htmlFor="contact-message" className="block text-sm font-semibold mb-2">Message *</label>
+                    <textarea id="contact-message" name="message" required value={formData.message} onChange={handleChange} rows={5} className={`${inputClass} resize-none`} placeholder="Tell me about your project or opportunity..."></textarea>
                   </div>
 
                   {status === 'error' && errorMsg && (
@@ -176,7 +183,7 @@ export default function Contact() {
                     {status === 'loading' ? (
                       <><Loader2 size={20} className="animate-spin" /> Sending...</>
                     ) : (
-                      <><Send size={20} /> Send Message</>
+                      <><Send size={20} /> {EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY ? 'Send Message' : 'Open Email App'}</>
                     )}
                   </button>
                 </>

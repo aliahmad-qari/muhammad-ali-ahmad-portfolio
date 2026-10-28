@@ -31,3 +31,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Original client captures are local reference material, not deployable assets.
+/Palm&gracescreenshot/
+/SOLbusinessConsultantscreenshot/
+/TMGscreenshot/
+/VEDMARKETINGSCREENSHOT/
