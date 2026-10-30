@@ -1,92 +1,247 @@
-# EmailJS Configuration Guide
+# Brevo Email Integration Guide
 
-The contact form on your portfolio is ready to send emails directly from the browser using EmailJS. Follow these steps to configure it:
+Your portfolio uses **Brevo** (formerly Sendinblue) for quote request emails. Brevo is a professional, reliable email service that's perfect for your needs.
 
-## Setup Instructions
+## Why Brevo?
 
-### 1. Create an EmailJS Account
-- Go to [emailjs.com](https://www.emailjs.com/)
-- Sign up for a free account
-- Verify your email address
+✅ **Free tier:** 300 emails/day (unlimited)  
+✅ **Professional infrastructure:** 99.9% uptime  
+✅ **Already configured:** Backend routes use Brevo  
+✅ **Auto confirmations:** Can send user confirmation emails  
+✅ **Email templates:** Built-in template editor  
 
-### 2. Create an Email Service
-- In the EmailJS dashboard, go to **Email Services**
-- Click **Add Service**
-- Select **Gmail** (or your preferred email provider)
-- Follow the authentication steps
-- Copy your **Service ID** (looks like: `service_xxxxx`)
+---
 
-### 3. Create an Email Template
-- Go to **Email Templates**
-- Click **Create New Template**
-- Use this template structure:
+## Step-by-Step Setup (15 minutes)
 
+### Step 1: Create Brevo Account
+1. Go to **https://www.brevo.com**
+2. Click **Sign up**
+3. Enter your email and create password
+4. Choose **"I want to send transactional emails"**
+5. Verify your email address
+
+**Time: 2-3 minutes**
+
+---
+
+### Step 2: Generate API Key
+1. Login to Brevo dashboard
+2. Click **Settings** (gear icon, top right)
+3. Go to **SMTP & API**
+4. Click **Transactional** tab
+5. Click **"Create a new API key"**
+6. Name it: `Portfolio Quote Requests`
+7. **Copy the full API key** (very long string)
+8. Save it somewhere safe (you'll need it next)
+
+**Time: 2 minutes**
+
+---
+
+### Step 3: Verify Sender Email
+1. In Brevo dashboard, click **Settings**
+2. Go to **Senders & Signatures**
+3. Click **Add a sender**
+4. Enter email you want quotes sent FROM:
+   - Option A: Your domain (noreply@yourdomain.com) - requires DNS verification
+   - Option B: Gmail (yourname@gmail.com) - automatic
+5. Click **Add sender**
+6. **Verify the email link** they send
+
+**Time: 5 minutes**
+
+---
+
+### Step 4: Add to Your Portfolio
+1. Open `.env.local` file in your project root
+2. Add these lines:
+
+```env
+# Brevo Email Configuration
+BREVO_API_KEY=paste_your_full_api_key_here
+ENQUIRY_FROM_EMAIL=your-verified-sender@gmail.com
+ENQUIRY_TO_EMAIL=your-personal-email@gmail.com
+ENQUIRY_FROM_NAME=Muhammad Ali Ahmad | Portfolio
+ENQUIRY_SIGNING_SECRET=generate_random_32_character_string_here
 ```
-Subject: {{subject}}
-From: {{from_email}}
 
-Name: {{from_name}}
-Message:
-{{message}}
+**For ENQUIRY_SIGNING_SECRET:** Generate a random string (any 32+ characters):
+```
+Example: aB3dE5fG7hI9jK1lM3nO5pQ7rS9tU1v3w5
 ```
 
-- Save the template and copy your **Template ID** (looks like: `template_xxxxx`)
+3. Save the file
 
-### 4. Get Your Public Key
-- Go to **Account Settings** → **API Keys**
-- Copy your **Public Key** (looks like: `xxxxxxxxxxxxx`)
+**Time: 2 minutes**
 
-### 5. Update the Contact Component
-- Open `app/components/Contact.tsx`
-- Find the EmailJS configuration section at the top
-- Replace the three placeholder values:
+---
 
-```typescript
-const EMAILJS_SERVICE_ID  = 'your_service_id_here'
-const EMAILJS_TEMPLATE_ID = 'your_template_id_here'
-const EMAILJS_PUBLIC_KEY  = 'your_public_key_here'
+### Step 5: Deploy to Vercel
+1. In terminal/Git:
+```bash
+git add .env.local
+git commit -m "Configure Brevo email integration"
+git push origin main
 ```
 
-### 6. Deploy
-- Commit and push your changes to GitHub
-- Vercel will automatically redeploy your portfolio
-- Test the contact form on the live site
+2. Vercel auto-deploys within 30 seconds
+
+**Time: 1 minute**
+
+---
+
+### Step 6: Test It Works
+1. Visit your live portfolio: https://yourdomain.com
+2. Go to `/enquiry` form
+3. Fill out and submit (test data OK)
+4. Check your **ENQUIRY_TO_EMAIL** inbox
+5. Should receive formatted email within 30 seconds
+
+**Successful email looks like:**
+```
+Subject: Quote request: Web Application
+From: Muhammad Ali Ahmad <noreply@yourname.com>
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NEW QUOTE REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Name: John Smith
+Email: john@company.com
+Company: Tech Startup Inc
+Project Type: Web Application
+Budget: $5,000 - $10,000
+Timeline: 3-6 months
+
+[Full inquiry details...]
+```
+
+**Time: 5 minutes**
+
+---
 
 ## Current Status
 
-✅ Contact form is fully functional with:
-- Client-side validation
-- Honeypot spam protection
-- Success/error states
-- Fallback email notice
+✅ **Enquiry form** (`/enquiry`): Uses Brevo (backend API)  
+✅ **Quote request route** (`/api/enquiry`): Configured for Brevo  
+✅ **Security**: Rate limiting + Turnstile CAPTCHA enabled  
 
-⚠️ EmailJS not yet configured with credentials
-- Form will show error message asking to email directly
-- Once configured above, emails will send automatically
+🔄 **Next** (Optional): Email confirmations to users
 
-## Testing the Form
-
-1. Fill out the form with test data
-2. Click "Send Message"
-3. Check your email for the submission
-4. Try sending from different devices to verify functionality
+---
 
 ## Troubleshooting
 
-**"Failed to send message" error:**
-- Verify all three credentials are correct in Contact.tsx
-- Check that your EmailJS service is connected to your email provider
-- Ensure your email provider allows third-party apps (Gmail: Less secure app access)
+### Email Not Arriving?
 
-**Emails going to spam:**
-- Add an SPF record to your email domain
-- Configure DKIM if available in your email provider
+**Check 1: API Key**
+- Copy the **entire** key (don't cut off the end)
+- No typos or extra spaces
+- Redeploy after saving `.env.local`
 
-**Rate limiting:**
-- EmailJS free tier allows 200 emails/month
-- Upgrade to paid plan if needed
+**Check 2: Sender Email**
+- Must be verified in Brevo first
+- Check spam/promotions folder
+- Wait 5 minutes (email can be delayed)
+
+**Check 3: Recipient Email**
+- Make sure `ENQUIRY_TO_EMAIL` is correct
+- Check spam folder
+- Add Brevo to safe senders
+
+**Check 4: Vercel Deployment**
+- Confirm `.env.local` was pushed to GitHub
+- Check Vercel deployment status (should show "Ready")
+- Clear browser cache and refresh
+
+**Check 5: Form Submission**
+- Check browser console (F12) for JavaScript errors
+- Ensure Turnstile CAPTCHA passed
+- Form must validate successfully
+
+### "Failed to Send" Error?
+
+1. Check `.env.local` has all required variables
+2. Verify API key is correct (copy again from Brevo)
+3. Check sender email is verified in Brevo
+4. Try submitting again (sometimes temporary)
+
+### Emails Going to Spam?
+
+1. Add Brevo to safe senders in your email
+2. In Brevo: Add SPF record to your domain (Settings → Senders)
+3. Enable DKIM if available
+
+---
+
+## Optional: Add User Confirmation Emails
+
+**Currently:** User submits → Admin gets email  
+**Better:** User + Admin both get emails
+
+This requires modifying the backend. We can enable this in Phase 2.
+
+---
+
+## Monitoring & Analytics
+
+**In Brevo Dashboard:**
+1. **Transactional Emails** → View all sent emails
+2. **Logs** → Track delivery status
+3. **Statistics** → Monitor bounce rates
+
+---
+
+## Cost & Limits
+
+| Metric | Limit |
+|--------|-------|
+| Daily emails | 300/day |
+| Monthly emails | Unlimited |
+| Cost | FREE |
+| Support | Community |
+
+For your portfolio, free tier is more than enough (you'll get <50 emails/day).
+
+---
 
 ## Support
 
-- [EmailJS Documentation](https://www.emailjs.com/docs/)
-- [EmailJS Contact Form Tutorial](https://www.emailjs.com/docs/tutorial/creating-contact-form/)
+- **Brevo Help:** https://help.brevo.com
+- **API Docs:** https://developers.brevo.com
+- **Status Page:** https://status.brevo.com
+
+---
+
+## Summary Checklist
+
+- [ ] Created Brevo account (https://brevo.com)
+- [ ] Generated API key
+- [ ] Verified sender email (Gmail or custom domain)
+- [ ] Added BREVO_API_KEY to `.env.local`
+- [ ] Added ENQUIRY_FROM_EMAIL to `.env.local`
+- [ ] Added ENQUIRY_TO_EMAIL to `.env.local`
+- [ ] Pushed to GitHub (`git push origin main`)
+- [ ] Waited for Vercel deployment
+- [ ] Tested quote form submission
+- [ ] Received email ✅
+
+**You're done!** Emails now work reliably. 🚀
+
+---
+
+## Contact Form (EmailJS)
+
+The simple contact form (`/components/Contact.tsx`) can optionally use EmailJS. It's configured but not required. Skip unless you want duplicate form paths.
+
+**Recommendation:** Use `/enquiry` form for all quotes (single source of truth).
+
+---
+
+## Next Phase (Optional)
+
+1. Add user confirmation email (sends to submitter)
+2. Add email templates in Brevo
+3. Setup Brevo webhooks for CRM sync
+4. Add SMS notifications (advanced)

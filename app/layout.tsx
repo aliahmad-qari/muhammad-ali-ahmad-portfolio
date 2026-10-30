@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { siteUrl } from './config/site'
+import MobileStickyCTA from './components/MobileStickyCTA'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -60,7 +61,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className={inter.className}><a className="skip-link" href="#main-content">Skip to content</a>{children}</body>
+      <body className={inter.className}>
+        <a className="skip-link" href="#main-content">Skip to content</a>
+        {children}
+        <MobileStickyCTA />
+      </body>
     </html>
   )
 }
