@@ -1,35 +1,41 @@
-# Project quote enquiries
+# Project enquiry setup
 
-Request Quote opens /enquiry. It does not send an email until the visitor completes the guided brief, provides contact consent, passes the spam check, and submits.
+`Request Quote` opens `/enquiry`. The guided form validates the brief in the browser and again on the server, checks the Turnstile token, applies an Upstash rate limit, and submits one admin notification through the selected transactional email provider. The Brevo integration already exists; this setup does not add another provider.
 
-## Brevo configuration
+## Required Vercel variables
 
-Copy .env.example to .env.local for local development. Add the same variables to the Vercel project environment for production, then redeploy. Do not commit .env.local or put keys in chat, browser code, or NEXT_PUBLIC_ variables.
+In Vercel, open **Project → Settings → Environment Variables** and add the following to the **Production** environment (add Preview/Development only if you want the form enabled there). Use values from your own accounts; do not paste secrets into source code or chat.
 
-- ENQUIRY_EMAIL_PROVIDER=brevo
-- BREVO_API_KEY: your private Brevo API key, not an SMTP password.
-- ENQUIRY_FROM_EMAIL: a bare email address verified as a sender in Brevo.
-- ENQUIRY_FROM_NAME: the name you want shown on notifications.
-- ENQUIRY_TO_EMAIL: the owner inbox that should receive quote requests.
-- ENQUIRY_SIGNING_SECRET: at least 32 random characters.
-- UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN: persistent spam rate limiting.
-- TURNSTILE_SECRET_KEY and NEXT_PUBLIC_TURNSTILE_SITE_KEY: the server secret and public site key for your registered domain.
-- NEXT_PUBLIC_SITE_URL: the exact production origin used by the form.
+| Name | Value to configure | Visibility |
+| --- | --- | --- |
+| `ENQUIRY_EMAIL_PROVIDER` | `brevo` | Server-side |
+| `BREVO_API_KEY` | Private Brevo API key with transactional email access | Secret; server-side only |
+| `ENQUIRY_FROM_EMAIL` | Email address verified as a sender in Brevo | Server-side |
+| `ENQUIRY_FROM_NAME` | Display name (optional; defaults to portfolio name) | Server-side |
+| `ENQUIRY_TO_EMAIL` | Inbox that should receive project enquiries | Server-side |
+| `ENQUIRY_SIGNING_SECRET` | At least 32 random characters | Secret; server-side only |
+| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST endpoint | Server-side |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash REST token | Secret; server-side only |
+| `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile secret for the deployed domain | Secret; server-side only |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Matching Turnstile site key | Public; browser needs it |
+| `NEXT_PUBLIC_SITE_URL` | Exact canonical deployed origin, e.g. `https://your-domain.example` | Public |
 
-Only the Turnstile site key and canonical URL are public. Keep the other keys server-side. The form stays unavailable if required settings are missing and offers an email-app alternative that the visitor sends themselves.
+The `.env.example` file contains placeholders only. For local work, copy it to `.env.local` and fill in local/test values; never commit `.env.local`. In Vercel, mark secrets as sensitive where the UI offers that option. After configuring variables, a new deployment is required before the runtime sees changed values. No Vercel settings have been changed as part of this review.
 
-Existing Resend configurations remain supported with ENQUIRY_EMAIL_PROVIDER=resend and RESEND_API_KEY.
+`ENQUIRY_FROM_EMAIL` must be an authorized Brevo sender. `ENQUIRY_TO_EMAIL` is the destination for admin notifications. The visitor's address is set as Reply-To. The private Brevo key is sent only from the server to `https://api.brevo.com/v3/smtp/email` in the `api-key` header. It must not use a `NEXT_PUBLIC_` prefix.
 
-## What arrives in the owner inbox
+The existing Resend alternative remains supported by setting `ENQUIRY_EMAIL_PROVIDER=resend` and configuring `RESEND_API_KEY`; no second email integration was created. Do not configure both providers expecting automatic failover: the code selects one provider.
 
-The email includes visitor name and email, business and public website if provided, project type and stage, project-specific discovery answers, budget range and currency, preferred timeline, full brief, and a consent note. Reply-To is the visitor's email; replying contacts the visitor. The From address stays your verified sender.
+## Persistence, retries, and delivery status
 
-Provider acceptance is not proof of inbox delivery. Use Brevo Transactional email logs to check delivery, bounce, or block status. A real end-to-end test requires configured credentials and an explicitly authorized test submission; automated tests mock all providers and send no real messages.
+Enquiries are **not persisted to a server-side database or durable queue** before email sending. The server performs up to two immediate attempts for a transient provider/network failure, using a stable idempotency value for the same submission. Brevo retry idempotency is time-limited by Brevo. Final provider failure returns an error to the form, and the visitor can retry while their draft remains in the open page. This is not a durable retry mechanism: if the visitor leaves and email was not accepted, the server has no saved enquiry to recover. A persistent store/queue and background retry worker would be needed for guaranteed recovery; neither is configured here.
 
-## Budgets and questions
+The server logs provider acceptance and final failure with provider, HTTP status/attempt count, and a short HMAC-derived reference. Logs exclude the enquiry content, email addresses, network address, API credentials, and provider response body. Check Vercel runtime logs for failures and Brevo transactional email logs for accepted, delivered, bounced, or blocked messages. Provider acceptance means Brevo accepted the request; it does not guarantee inbox delivery.
 
-Edit app/config/enquiry.ts to change currencies, budget bands, timeline choices, and follow-up questions. Budget bands represent visitor estimates, not published service prices. Approved package pricing remains in app/config/services.ts. All selections and conditional answers are revalidated server-side.
+Only one **admin notification** is sent. There is no client acknowledgement email template or delivery. Add one only if desired and tested separately.
 
-## Verification
+## Safe verification
 
-Run npm test, npm run lint, and npx tsc --noEmit. Tests cover both email providers, budget and conditional-answer validation, consent, spam protection, retry idempotency, and safe HTML rendering.
+`npm test` mocks Brevo/Resend and sends no real email. It checks provider selection, payload, validation, spam controls, retry idempotency, and failure behavior. A live end-to-end email check requires the account owner to configure Vercel variables and explicitly submit an authorized test enquiry; this review does not send production mail.
+
+Edit `app/config/enquiry.ts` to change currencies, budget bands, timeline choices, and follow-up questions. These selections are revalidated on the server. Budget bands are visitor estimates, not published service prices.

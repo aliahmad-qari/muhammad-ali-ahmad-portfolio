@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: '%s | Muhammad Ali Ahmad',
   },
   description:
-    'Results-driven Full Stack Developer with 3+ years of experience building scalable SaaS platforms, REST APIs, and production-ready web applications using React.js, Next.js, Node.js, and MongoDB. Available for remote and international opportunities.',
+    'Full Stack Developer with 3+ years of experience building web applications, SaaS platforms, and REST APIs with React.js, Next.js, Node.js, and MongoDB. Based in Multan, Pakistan and open to international opportunities.',
   keywords: [
     'Full Stack Developer', 'MERN Stack Developer', 'React Developer', 'Next.js Developer',
     'Node.js Developer', 'MongoDB', 'SaaS Developer', 'Remote Developer Pakistan',
@@ -46,7 +46,6 @@ export const metadata: Metadata = {
     title: 'Muhammad Ali Ahmad — Full Stack Developer | MERN | SaaS',
     description: 'Full Stack Developer with 3+ years building scalable SaaS platforms. Available for remote opportunities.',
     images: ['/opengraph-image'],
-    creator: '@muhammadaliahmad',
   },
   icons: {
     icon: [

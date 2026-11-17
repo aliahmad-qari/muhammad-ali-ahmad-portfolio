@@ -1,9 +1,9 @@
-import { createHmac, timingSafeEqual, randomUUID } from 'node:crypto'
+﻿import { createHmac, timingSafeEqual, randomUUID } from 'node:crypto'
 import { validateEnquiry } from './enquiry-validation'
 import { budgetLabel, followUpQuestions } from '../config/enquiry'
 
 type Env = Record<string, string | undefined>
-type Dependencies = { env: Env; fetch: typeof fetch; now: () => number }
+type Dependencies = { env: Env; fetch: typeof fetch; now: () => number; log?: (level: 'info' | 'error', event: string, details: Record<string, string | number>) => void }
 class ServiceError extends Error { constructor(public status: number, message: string) { super(message) } }
 const required = [ 'ENQUIRY_FROM_EMAIL', 'ENQUIRY_TO_EMAIL', 'ENQUIRY_SIGNING_SECRET', 'UPSTASH_REDIS_REST_URL', 'UPSTASH_REDIS_REST_TOKEN', 'TURNSTILE_SECRET_KEY', 'NEXT_PUBLIC_TURNSTILE_SITE_KEY']
 function signature(value: string, secret: string) { return createHmac('sha256', secret).update(value).digest('hex') }
@@ -19,6 +19,7 @@ async function limitedJson(request: Request) {
 }
 export function createEnquiryHandlers(deps: Dependencies) {
   const { env, now } = deps
+  const log = deps.log || ((level, event, details) => console[level](JSON.stringify({ event, ...details })))
   const origin = () => new URL(env.NEXT_PUBLIC_SITE_URL || 'https://muhammad-ali-ahmad-portfolio.vercel.app').origin
   function assertOrigin(request: Request, post: boolean) {
     const source = request.headers.get('origin')
@@ -87,6 +88,7 @@ export function createEnquiryHandlers(deps: Dependencies) {
         ]
         const text = ['New project quote request', ...details.map(([label, value]) => label + ': ' + value), '', 'Project brief', data.description, '', 'Consent: agreed to contact about this enquiry', 'Received: ' + new Date(now()).toISOString()].join('\n')
         const digest = signature(JSON.stringify([body.submissionId, data]), env.ENQUIRY_SIGNING_SECRET!)
+        const reference = digest.slice(0, 12)
         const idempotencyKey = 'enquiry-' + digest
         const brevoKey = digest.slice(0, 8) + '-' + digest.slice(8, 12) + '-4' + digest.slice(13, 16) + '-a' + digest.slice(17, 20) + '-' + digest.slice(20, 32)
         const escape = (value: string) => value.replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]!))
@@ -104,15 +106,39 @@ export function createEnquiryHandlers(deps: Dependencies) {
         // Both providers receive a stable idempotency key when retrying the same request.
         for (let attempt = 0; attempt < 2; attempt++) {
           try { sent = await provider(endpoint, { method: 'POST', headers: { ...auth, Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(mail) }) }
-          catch (error) { if (attempt === 1) throw error; continue }
+          catch (error) {
+            if (attempt === 1) {
+              log('error', 'enquiry_email_transport_failed', { provider: emailProvider, reference, attempts: attempt + 1, errorType: error instanceof Error ? error.name : 'UnknownError' })
+              throw error
+            }
+            continue
+          }
           if (sent.ok || (sent.status < 500 && sent.status !== 429)) break
         }
-        if (!sent) throw new ServiceError(502, 'The notification could not be sent. Please retry or email me directly.')
-        const receipt = await sent.json()
-        if (isBrevo && sent.status === 400 && receipt.code === 'duplicate_parameter') return json({ message: 'This enquiry was already accepted for email delivery. Thank you.' })
-        if (!sent.ok) throw new ServiceError(502, 'The notification could not be sent. Your message is still here; please retry or email me directly.')
+        if (!sent) {
+          log('error', 'enquiry_email_no_response', { provider: emailProvider, reference, attempts: 2 })
+          throw new ServiceError(502, 'The notification could not be sent. Please retry or email me directly.')
+        }
+        let receipt: Record<string, unknown>
+        try { receipt = await sent.json() as Record<string, unknown> }
+        catch {
+          log('error', 'enquiry_email_invalid_receipt', { provider: emailProvider, reference, status: sent.status })
+          throw new ServiceError(502, 'Delivery could not be confirmed. Please email me directly.')
+        }
+        if (isBrevo && sent.status === 400 && receipt.code === 'duplicate_parameter') {
+          log('info', 'enquiry_email_duplicate_accepted', { provider: emailProvider, reference })
+          return json({ message: 'This enquiry was already accepted for email delivery. Thank you.' })
+        }
+        if (!sent.ok) {
+          log('error', 'enquiry_email_rejected', { provider: emailProvider, reference, attempts: sent.status >= 500 || sent.status === 429 ? 2 : 1, status: sent.status })
+          throw new ServiceError(502, 'The notification could not be sent. Your message is still here; please retry or email me directly.')
+        }
         const receiptId = isBrevo ? receipt.messageId : receipt.id
-        if (typeof receiptId !== 'string' || !receiptId) throw new ServiceError(502, 'Delivery could not be confirmed. Please email me directly.')
+        if (typeof receiptId !== 'string' || !receiptId) {
+          log('error', 'enquiry_email_receipt_missing', { provider: emailProvider, reference, status: sent.status })
+          throw new ServiceError(502, 'Delivery could not be confirmed. Please email me directly.')
+        }
+        log('info', 'enquiry_email_accepted', { provider: emailProvider, reference, status: sent.status })
         return json({ message: 'Your enquiry was accepted for email delivery. Thank you.' })
       } catch (error) {
         // Never include provider bodies, credentials, or the enquiry itself in logs or responses.

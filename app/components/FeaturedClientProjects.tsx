@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { ArrowUpRight, ArrowRight } from 'lucide-react'
+import { ArrowUpRight, ArrowRight, Check } from 'lucide-react'
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
 import { featuredProjects } from '../data/featuredProjects'
 import ProjectGallery from './ProjectGallery'
@@ -23,7 +23,7 @@ export default function FeaturedClientProjects() {
                 <p className="text-xs text-electric-400 mb-3 uppercase tracking-wider">0{index + 1} / {project.category}</p>
                 <h3 className="text-2xl md:text-3xl font-semibold text-slate-100 mb-4">{project.title}</h3>
                 <p className="text-slate-400 leading-relaxed mb-6">{project.description}</p>
-                <ul className="grid sm:grid-cols-2 gap-3 mb-6">{project.features.map(feature => <li key={feature} className="text-sm text-slate-300 flex gap-2"><span className="text-electric-400" aria-hidden="true">?</span>{feature}</li>)}</ul>
+                <ul className="grid sm:grid-cols-2 gap-3 mb-6">{project.features.map(feature => <li key={feature} className="text-sm text-slate-300 flex gap-2"><Check size={16} className="mt-0.5 shrink-0 text-electric-400" aria-hidden="true" /><span>{feature}</span></li>)}</ul>
                 <div className="flex flex-wrap gap-2 mb-7">{project.tech.map(tech => <span key={tech} className="rounded-md bg-slate-800 px-2.5 py-1 text-xs text-slate-400">{tech}</span>)}</div>
                 <div className="flex flex-wrap gap-5 mt-auto pt-5 border-t border-slate-800">
                   <Link href={'/projects/' + project.id} className="inline-flex items-center gap-2 text-sm font-semibold text-electric-400 hover:text-electric-300">Explore case study <ArrowRight size={16} /></Link>

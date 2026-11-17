@@ -54,7 +54,7 @@ export default function Experience() {
         <div className="mb-16 animate-on-scroll">
           <p className="text-center text-xs font-semibold uppercase tracking-widest text-purple-400 mb-3">Work history</p>
           <h2 className="text-4xl md:text-5xl font-bold text-center gradient-text">Professional Experience</h2>
-          <p className="text-center text-gray-400 mt-3 text-sm">3+ years · Onsite · Hybrid · Remote</p>
+          <p className="text-center text-gray-400 mt-3 text-sm">3+ years · Multan, Pakistan · Remote and onsite experience</p>
         </div>
 
         <div className="max-w-4xl mx-auto">

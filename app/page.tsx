@@ -2,7 +2,6 @@ import Navbar from './components/Navbar'
 import ScrollIndicator from './components/ScrollIndicator'
 import Hero from './components/Hero'
 import FeaturedClientProjects from './components/FeaturedClientProjects'
-import Testimonials from './components/Testimonials'
 import Projects from './components/Projects'
 import Services from './components/Services'
 import Skills from './components/Skills'
@@ -19,7 +18,6 @@ export default function Home() {
       <ScrollIndicator />
       <Hero />
       <FeaturedClientProjects />
-      <Testimonials />
       <Projects />
       <Services />
       <Skills />

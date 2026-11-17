@@ -9,11 +9,6 @@ export default function MobileStickyCTA() {
   const [isVisible, setIsVisible] = useState(false)
   const [scrollY, setScrollY] = useState(0)
 
-  // Hide on /enquiry (already on form page)
-  if (pathname === '/enquiry' || pathname === '/hire-me') {
-    return null
-  }
-
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY)
@@ -24,6 +19,11 @@ export default function MobileStickyCTA() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // Hide on /enquiry (already on form page) - check AFTER hooks
+  if (pathname === '/enquiry' || pathname === '/hire-me') {
+    return null
+  }
 
   return (
     <div

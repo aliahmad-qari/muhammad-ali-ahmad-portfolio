@@ -104,7 +104,7 @@ export default function EnquiryForm({ initialType = '' }: { initialType?: string
       const data = await response.json()
       if (!response.ok) { setErrors(data.errors || {}); throw new Error(data.error || 'Please retry or email me directly.') }
       setStatus('sent'); setMessage(data.message)
-    } catch (failure) { setStatus('ready'); setMessage(failure instanceof Error && !['TimeoutError', 'AbortError'].includes(failure.name) ? failure.message : 'The service took too long. Your brief is saved here; retry or use email.') }
+    } catch (failure) { setStatus('ready'); setMessage(failure instanceof Error && !['TimeoutError', 'AbortError'].includes(failure.name) ? failure.message : 'The service took too long. Your form details remain on this page; retry or use the email option.') }
     finally { setToken(''); if (widgetId.current) window.turnstile?.reset(widgetId.current) }
   }
   const questions = followUpQuestions[draft.projectType] || []
@@ -143,7 +143,30 @@ export default function EnquiryForm({ initialType = '' }: { initialType?: string
           {step === 2 && <>
             <section className="rounded-xl border border-slate-700 bg-slate-950/40 p-5"><div className="flex items-center justify-between gap-3 mb-4"><h3 className="font-semibold">Your project brief</h3><button type="button" onClick={() => moveTo(0)} className="text-xs text-electric-400 underline">Edit details</button></div><dl className="grid sm:grid-cols-2 gap-x-5 gap-y-4 text-sm">{[['Service', draft.projectType], ['Starting point', draft.projectStage], ['Budget', budgetLabel(draft.currency, draft.budget)], ['Preferred timeframe', draft.timeline], ...questions.map(question => [question.label, draft.answers[question.id]])].map(([label, value]) => <div key={label}><dt className="text-xs text-slate-500 mb-1">{label}</dt><dd className="text-slate-200 break-words">{value}</dd></div>)}</dl><p className="text-sm text-slate-400 whitespace-pre-wrap break-words mt-5 pt-4 border-t border-slate-800">{draft.description}</p><button type="button" onClick={() => moveTo(1)} className="text-xs text-electric-400 underline mt-3">Edit budget and scope</button></section>
             <div className="grid sm:grid-cols-2 gap-5"><div><label htmlFor="name" className="block text-sm font-semibold mb-2">Your name *</label><input id="name" name="name" autoComplete="name" maxLength={100} required value={draft.name} onChange={event => update('name', event.target.value)} className={field} {...accessibility('name')} />{error('name')}</div><div><label htmlFor="email" className="block text-sm font-semibold mb-2">Email address *</label><input id="email" name="email" type="email" autoComplete="email" maxLength={254} required value={draft.email} onChange={event => update('email', event.target.value)} className={field} {...accessibility('email')} />{error('email')}</div></div>
-            <div><label htmlFor="consent" className="flex items-start gap-3 text-sm text-slate-300 leading-relaxed"><input id="consent" name="consent" type="checkbox" required checked={draft.consent} onChange={event => update('consent', event.target.checked)} className="accent-sky-500 mt-1" {...accessibility('consent')} /><span>I agree to be contacted about this enquiry, as described in the <Link href="/privacy" className="text-electric-400 underline">privacy notice</Link>.</span></label>{error('consent')}</div>
+            <div className="space-y-4">
+              <div className="rounded-lg bg-slate-800/20 border border-slate-700/30 p-5">
+                <p className="text-sm text-slate-300 leading-relaxed mb-3">
+                    <strong className="text-slate-100">Privacy at a glance:</strong>
+                </p>
+                <ul className="space-y-2 text-sm text-slate-400">
+                  <li>✓ Your brief is used to respond to this project enquiry, not for marketing</li>
+                  <li>✓ Email delivery and spam protection use the providers listed in the privacy notice</li>
+                  <li>✓ Your enquiry is kept for the conversation or any resulting engagement</li>
+                  <li>✓ You can request access, correction, or deletion, subject to legal obligations</li>
+                </ul>
+              </div>
+              <label htmlFor="consent" className="flex items-start gap-3 text-sm text-slate-300 leading-relaxed">
+                <input id="consent" name="consent" type="checkbox" required checked={draft.consent} onChange={event => update('consent', event.target.checked)} className="accent-sky-500 mt-1" {...accessibility('consent')} />
+                <span>
+                  I agree to be contacted about this enquiry and have read the{' '}
+                  <Link href="/privacy" className="text-electric-400 hover:text-electric-300 underline">
+                    privacy policy
+                  </Link>
+                  .
+                </span>
+              </label>
+              {error('consent')}
+            </div>
             <div ref={widget} className="min-h-[65px]" />
             <div aria-live="polite" className="text-sm text-slate-300 leading-relaxed">{status === 'loading' ? 'Loading secure submission…' : message}{status === 'unavailable' && <button type="button" onClick={() => void loadConfig()} className="block mt-3 text-electric-400 underline">Retry secure submission</button>}</div>
           </>}

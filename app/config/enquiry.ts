@@ -1,6 +1,7 @@
 export const currencies = ['USD', 'PKR', 'GBP', 'EUR', 'AUD', 'CAD', 'AED'] as const
 export const projectStages = ['New project', 'Redesign an existing product', 'Improve or extend an existing product', 'Exploring an idea'] as const
 export const timelines = ['As soon as practical', 'Within 2–4 weeks', 'Within 1–2 months', 'Within 3–6 months', 'Flexible / need advice'] as const
+
 export type FollowUpQuestion = { id: string; label: string; options: string[] }
 const websiteQuestions: FollowUpQuestion[] = [
   { id: 'websiteGoal', label: 'What should your website help visitors do?', options: ['Enquire about services', 'Explore my business or portfolio', 'Buy products online', 'Book an appointment', 'I need guidance'] },

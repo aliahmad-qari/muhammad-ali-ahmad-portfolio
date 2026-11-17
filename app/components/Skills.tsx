@@ -65,7 +65,7 @@ export default function Skills() {
           <p className="text-xs font-semibold uppercase tracking-widest text-electric-400 mb-3">My Toolkit</p>
           <h2 className="text-4xl md:text-5xl font-bold mb-3">
             <span className="block text-slate-100">Technologies I</span>
-            <span className="gradient-text">work with daily</span>
+            <span className="gradient-text">I use</span>
           </h2>
           <p className="text-slate-400 text-lg max-w-2xl">
             Full-stack · MERN Stack specialist · WordPress · AI Automation · Cloud Infrastructure

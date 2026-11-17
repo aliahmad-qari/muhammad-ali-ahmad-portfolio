@@ -13,6 +13,7 @@ const valid = { name: 'Test Person', email: 'person@example.test', company: '', 
 function fixture(options = {}) {
   let time = 1800000000000
   const calls = []
+  const logs = []
   const env = { NODE_ENV: 'production', VERCEL: '1', NEXT_PUBLIC_SITE_URL: origin, RESEND_API_KEY: 'test-only', ENQUIRY_FROM_EMAIL: 'test@example.test', ENQUIRY_TO_EMAIL: 'owner@example.test', ENQUIRY_SIGNING_SECRET: 'test-secret-not-for-production-000000', UPSTASH_REDIS_REST_URL: 'https://redis.example', UPSTASH_REDIS_REST_TOKEN: 'test-only', TURNSTILE_SECRET_KEY: 'test-only', NEXT_PUBLIC_TURNSTILE_SITE_KEY: 'test-only', ...options.env }
   let emailAttempt = 0
   const mockedFetch = async (url, init) => {
@@ -24,8 +25,8 @@ function fixture(options = {}) {
     if (options.duplicate && url.includes('brevo.com')) return Response.json({ code: 'duplicate_parameter' }, { status: 400 })
     return Response.json(url.includes('brevo.com') ? { messageId: '<mock-email@brevo.test>' } : { id: 'mock-email-id' })
   }
-  const handlers = createEnquiryHandlers({ env, fetch: mockedFetch, now: () => time })
-  return { calls, handlers, advance: n => { time += n }, async payload() { const response = await handlers.GET(new Request(origin + '/api/enquiry')); const config = await response.json(); time += 3000; return { ...valid, challenge: config.challenge, website: '', submissionId: '8cfb1f47-40d8-45df-a2df-875e0c87cadd', turnstileToken: 'valid-mock-token' } }, post(body, requestOrigin = origin) { return handlers.POST(new Request(origin + '/api/enquiry', { method: 'POST', headers: { Origin: requestOrigin, 'Content-Type': 'application/json', 'x-vercel-forwarded-for': '192.0.2.1' }, body: JSON.stringify(body) })) } }
+  const handlers = createEnquiryHandlers({ env, fetch: mockedFetch, now: () => time, log: (level, event, details) => logs.push({ level, event, details }) })
+  return { calls, logs, handlers, advance: n => { time += n }, async payload() { const response = await handlers.GET(new Request(origin + '/api/enquiry')); const config = await response.json(); time += 3000; return { ...valid, challenge: config.challenge, website: '', submissionId: '8cfb1f47-40d8-45df-a2df-875e0c87cadd', turnstileToken: 'valid-mock-token' } }, post(body, requestOrigin = origin) { return handlers.POST(new Request(origin + '/api/enquiry', { method: 'POST', headers: { Origin: requestOrigin, 'Content-Type': 'application/json', 'x-vercel-forwarded-for': '192.0.2.1' }, body: JSON.stringify(body) })) } }
 }
 test('shared validation normalizes email and requires explicit consent', () => {
   assert.equal(validateEnquiry({ ...valid, email: ' PERSON@EXAMPLE.TEST ' }).data.email, 'person@example.test')
@@ -95,6 +96,10 @@ test('provider failures never report success or leak provider response bodies', 
   const response = await f.post(body)
   assert.equal(response.status, 502)
   assert.ok(!(await response.text()).includes('provider-private-detail'))
+  assert.equal(f.logs.at(-1).event, 'enquiry_email_rejected')
+  assert.deepEqual(Object.keys(f.logs.at(-1).details).sort(), ['attempts', 'provider', 'reference', 'status'])
+  const safeLog = JSON.stringify(f.logs)
+  for (const privateValue of [valid.email, valid.description, 'provider-private-detail', 'test-only']) assert.ok(!safeLog.includes(privateValue))
 })
 test('oversized requests are rejected before email delivery', async () => {
   const f = fixture(); const body = await f.payload()
