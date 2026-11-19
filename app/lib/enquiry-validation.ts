@@ -5,6 +5,20 @@ export type Enquiry = {
   currency: string; budget: string; timeline: string; description: string; answers: Record<string, string>; consent: boolean
 }
 export type EnquiryErrors = Partial<Record<keyof Enquiry, string>>
+export type ContactMessage = { name: string; email: string; subject: string; message: string; consent: boolean }
+export type ContactErrors = Partial<Record<keyof ContactMessage, string>>
+export function validateContact(input: unknown): { data?: ContactMessage; errors: ContactErrors } {
+  const raw = input && typeof input === 'object' && !Array.isArray(input) ? input as Record<string, unknown> : {}
+  const get = (key: keyof ContactMessage) => typeof raw[key] === 'string' ? (raw[key] as string).trim() : ''
+  const data = { name: get('name'), email: get('email').toLowerCase(), subject: get('subject'), message: get('message'), consent: raw.consent === true }
+  const errors: ContactErrors = {}
+  if (data.name.length < 2 || data.name.length > 100 || /[\r\n\x00-\x1f]/.test(data.name)) errors.name = 'Enter your name (2–100 characters).'
+  if (data.email.length > 254 || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(data.email)) errors.email = 'Enter a valid email address.'
+  if (data.subject.length > 120 || /[\r\n\x00-\x1f]/.test(data.subject)) errors.subject = 'Use up to 120 characters for the subject.'
+  if (data.message.length < 10 || data.message.length > 4000 || /[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(data.message)) errors.message = 'Write a message between 10 and 4,000 characters.'
+  if (!data.consent) errors.consent = 'Please agree to be contacted about your message.'
+  return Object.keys(errors).length ? { errors } : { data, errors }
+}
 export function emptyEnquiry(projectType = ''): Enquiry { return { name: '', email: '', company: '', existingUrl: '', projectType, projectStage: '', currency: 'USD', budget: '', timeline: '', description: '', answers: {}, consent: false } }
 export function validateEnquiry(input: unknown): { data?: Enquiry; errors: EnquiryErrors } {
   const raw = input && typeof input === 'object' && !Array.isArray(input) ? input as Record<string, unknown> : {}

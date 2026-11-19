@@ -4,6 +4,7 @@ import ServicePackageGrid from '../components/ServicePackageGrid'
 import ServiceFAQ from '../components/ServiceFAQ'
 import DevelopmentProcess from '../components/DevelopmentProcess'
 import { MaintenancePlans } from '../components/PackageCards'
+import ProjectFitGuide from '../components/ProjectFitGuide'
 
 export const metadata: Metadata = {
   title: 'Services & Packages | Muhammad Ali Ahmad — Full Stack Developer',
@@ -59,6 +60,8 @@ export default function ServicesPage() {
 
       {/* Development Process */}
       <DevelopmentProcess />
+
+      <ProjectFitGuide />
 
       {/* Optional post-launch support */}
       <MaintenancePlans />

@@ -60,7 +60,7 @@ An automated boundary/range reminder engine integrated with the Brevo email API.
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS
 - **Icons:** Lucide React
-- **Contact Form:** EmailJS
+- **Contact Forms:** Server-side Brevo delivery with validation, Turnstile, and rate limiting
 
 ## 🏁 Getting Started
 

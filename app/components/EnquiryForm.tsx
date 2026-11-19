@@ -27,6 +27,7 @@ export default function EnquiryForm({ initialType = '' }: { initialType?: string
   const [step, setStep] = useState(0)
   const [errors, setErrors] = useState<EnquiryErrors>({})
   const [message, setMessage] = useState('')
+  const [reference, setReference] = useState('')
   const [status, setStatus] = useState<'loading' | 'ready' | 'sending' | 'sent' | 'unavailable'>('loading')
   const [config, setConfig] = useState<{ challenge: string; siteKey: string } | null>(null)
   const [scriptReady, setScriptReady] = useState(false)
@@ -97,13 +98,16 @@ export default function EnquiryForm({ initialType = '' }: { initialType?: string
     const website = new FormData(event.currentTarget).get('website') || ''
     setStatus('sending'); setMessage('')
     try {
+      const challengeResponse = await fetch('/api/enquiry', { cache: 'no-store', signal: AbortSignal.timeout(10000) })
+      const freshChallenge = await challengeResponse.json()
+      if (!challengeResponse.ok || typeof freshChallenge.challenge !== 'string') throw new Error(freshChallenge.error || 'Secure verification expired. Please retry.')
       const response = await fetch('/api/enquiry', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(35000),
-        body: JSON.stringify({ ...result.data, website, challenge: config.challenge, turnstileToken: token, submissionId: submissionId.current }),
+        body: JSON.stringify({ ...result.data, website, challenge: freshChallenge.challenge, turnstileToken: token, submissionId: submissionId.current }),
       })
       const data = await response.json()
       if (!response.ok) { setErrors(data.errors || {}); throw new Error(data.error || 'Please retry or email me directly.') }
-      setStatus('sent'); setMessage(data.message)
+      setStatus('sent'); setMessage(data.message); setReference(typeof data.reference === 'string' ? data.reference : '')
     } catch (failure) { setStatus('ready'); setMessage(failure instanceof Error && !['TimeoutError', 'AbortError'].includes(failure.name) ? failure.message : 'The service took too long. Your form details remain on this page; retry or use the email option.') }
     finally { setToken(''); if (widgetId.current) window.turnstile?.reset(widgetId.current) }
   }
@@ -116,7 +120,7 @@ export default function EnquiryForm({ initialType = '' }: { initialType?: string
   ].join('\n')
   const emailHref = 'mailto:' + contactEmail + '?subject=' + encodeURIComponent('Project quote request: ' + (draft.projectType || 'New project')) + '&body=' + encodeURIComponent(emailBody)
 
-  if (sent) return <div className="glass rounded-2xl p-8 sm:p-12 text-center" role="status"><CheckCircle2 className="text-emerald-400 mx-auto mb-5" size={42} /><p className="eyebrow">Enquiry submitted</p><h2 className="text-3xl font-semibold mb-4">Thank you, {draft.name.trim().split(/\s+/)[0]}.</h2><p className="text-slate-300 max-w-xl mx-auto leading-relaxed">Your project brief has been accepted for email delivery. I’ll review the requirements and follow up at {draft.email}.</p><p className="text-sm text-slate-400 mt-4">No booking or payment has been made. Scope, price, and delivery dates are confirmed in a proposal.</p><Link href="/services" className="inline-flex mt-7 items-center gap-2 text-electric-400 font-semibold">Explore services <ArrowRight size={16} /></Link></div>
+  if (sent) return <div className="glass rounded-2xl p-8 sm:p-12 text-center" role="status"><CheckCircle2 className="text-emerald-400 mx-auto mb-5" size={42} /><p className="eyebrow">Enquiry submitted</p><h2 className="text-3xl font-semibold mb-4">Thank you, {draft.name.trim().split(/\s+/)[0]}.</h2><p className="text-slate-300 max-w-xl mx-auto leading-relaxed">Your project brief has been saved and email delivery is queued. I’ll review the requirements and follow up at {draft.email}.</p>{reference && <p className="text-sm text-slate-400 mt-3">Reference: {reference}</p>}<p className="text-sm text-slate-400 mt-4">If the automatic confirmation does not arrive, check your spam folder or contact me directly. No booking or payment has been made.</p><Link href="/services" className="inline-flex mt-7 items-center gap-2 text-electric-400 font-semibold">Explore services <ArrowRight size={16} /></Link></div>
 
   return <>
     <noscript><p className="mb-6 text-slate-300">This guided form requires JavaScript. You can email <a href={'mailto:' + contactEmail} className="text-electric-400 underline">{contactEmail}</a> directly.</p></noscript>

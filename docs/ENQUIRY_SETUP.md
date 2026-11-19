@@ -1,6 +1,6 @@
 # Project enquiry setup
 
-`Request Quote` opens `/enquiry`. The guided form validates the brief in the browser and again on the server, checks the Turnstile token, applies an Upstash rate limit, and submits one admin notification through the selected transactional email provider. The Brevo integration already exists; this setup does not add another provider.
+The home page Contact form and `Request Quote` workflow both use the existing server-side email integration. The guided project form is at `/enquiry`. Both forms validate on the server, check Turnstile, apply an Upstash rate limit, and submit an admin notification through the selected transactional email provider.
 
 ## Required Vercel variables
 
@@ -16,6 +16,11 @@ In Vercel, open **Project → Settings → Environment Variables** and add the f
 | `ENQUIRY_SIGNING_SECRET` | At least 32 random characters | Secret; server-side only |
 | `UPSTASH_REDIS_REST_URL` | Upstash Redis REST endpoint | Server-side |
 | `UPSTASH_REDIS_REST_TOKEN` | Upstash REST token | Secret; server-side only |
+| `ENQUIRY_DATA_ENCRYPTION_KEY` | Base64-encoded random 32-byte AES key (`openssl rand -base64 32`) | Secret; server-side only |
+| `QSTASH_TOKEN` | Upstash QStash publish token | Secret; server-side only |
+| `QSTASH_CURRENT_SIGNING_KEY` | Current QStash callback signing key | Secret; server-side only |
+| `QSTASH_NEXT_SIGNING_KEY` | Next QStash callback signing key | Secret; server-side only |
+| `CRON_SECRET` | Random secret used to protect the recovery endpoint | Secret; server-side only |
 | `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile secret for the deployed domain | Secret; server-side only |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Matching Turnstile site key | Public; browser needs it |
 | `NEXT_PUBLIC_SITE_URL` | Exact canonical deployed origin, e.g. `https://your-domain.example` | Public |
@@ -28,11 +33,15 @@ The existing Resend alternative remains supported by setting `ENQUIRY_EMAIL_PROV
 
 ## Persistence, retries, and delivery status
 
-Enquiries are **not persisted to a server-side database or durable queue** before email sending. The server performs up to two immediate attempts for a transient provider/network failure, using a stable idempotency value for the same submission. Brevo retry idempotency is time-limited by Brevo. Final provider failure returns an error to the form, and the visitor can retry while their draft remains in the open page. This is not a durable retry mechanism: if the visitor leaves and email was not accepted, the server has no saved enquiry to recover. A persistent store/queue and background retry worker would be needed for guaranteed recovery; neither is configured here.
+Before email processing, the server encrypts the enquiry and message payloads using AES-256-GCM and stores them in Upstash Redis. Records, deduplication keys, and delivery states expire after 90 days. Redis contains no plaintext contact fields. The API response includes a short enquiry reference; resubmitting the same submission ID returns that reference without creating another record.
 
-The server logs provider acceptance and final failure with provider, HTTP status/attempt count, and a short HMAC-derived reference. Logs exclude the enquiry content, email addresses, network address, API credentials, and provider response body. Check Vercel runtime logs for failures and Brevo transactional email logs for accepted, delivered, bounced, or blocked messages. Provider acceptance means Brevo accepted the request; it does not guarantee inbox delivery.
+Admin notification and visitor acknowledgement each have their own persisted status and stable provider idempotency value. Upstash QStash calls the private delivery route after a short delay and retries transient failures up to three times. A worker verifies QStash signatures, obtains a per-message Redis lease, skips already accepted deliveries, and records acceptance or failure. Provider acceptance means the provider accepted the message; it does not prove inbox delivery. Check Vercel runtime logs and the Brevo transactional email logs for final delivery/bounce information. QStash retry logs and its dead-letter UI are operational recovery tools; QStash retains its logs/dead-letter entries only for its plan's stated period.
 
-Only one **admin notification** is sent. There is no client acknowledgement email template or delivery. Add one only if desired and tested separately.
+The API sends immediate best-effort mail after the record and delayed retry jobs are safely created. If queue publishing is unavailable, submission processing fails closed and the saved record remains in Redis for support/recovery; it is not silently reported as delivered. Never delete the Redis database to clear a test: it also holds rate-limit counters and active enquiries. Access/deletion requests should be handled by the owner using the reference and Redis console, then separately from the inbox/provider.
+
+Configure the three QStash values and encryption key in Vercel Production and redeploy before enabling the form. QStash retries are limited; they do not guarantee delivery if the record expires, credentials are invalid, the provider permanently rejects the message, or the queue's retry window is exhausted. No public enquiry-reading endpoint or payment handling is implemented.
+
+The signed worker route is `/api/enquiry/deliver`. `/api/enquiry/reconcile` is protected by `Authorization: Bearer $CRON_SECRET`; it re-enqueues records that were saved but could not be published to QStash. `vercel.json` schedules this check daily at 08:00 UTC. Add a strong `CRON_SECRET` in Vercel before deploying; Vercel sends it as a bearer token to the scheduled route. No schedule is active in production until a deployment containing this config is made.
 
 ## Safe verification
 
